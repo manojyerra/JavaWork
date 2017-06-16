@@ -47,13 +47,13 @@ class NewDeleteKeyWordsReplacer
         
         while( (line = br.readLine()) != null)
         {
-			if(!line.trim().startsWith("//"))
-			{			
-				line = ReplaceNewTraceInLine(line);
-				line = ReplaceDeleteTraceInLine(line);
-				line = line.replaceAll("malloc", "mallocTrace");
-				line = line.replaceAll("free", "freeTrace");
-            }
+			//if(!line.trim().startsWith("//"))
+			//{			
+			//	line = ReplaceNewTraceInLine(line);
+			//	line = ReplaceDeleteTraceInLine(line);
+			//	line = line.replaceAll("malloc", "mallocTrace");
+			//	line = line.replaceAll("free", "freeTrace");
+            //}
 			
             lines.add(line);
         }
@@ -65,9 +65,9 @@ class NewDeleteKeyWordsReplacer
         for(int i=0; i<lines.size(); i++)
         {
             String str = lines.get(i);
-            
+			
             bw.write(str, 0, str.length());
-            bw.newLine();
+			bw.newLine();
         }
         
         bw.flush();
