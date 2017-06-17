@@ -8,7 +8,6 @@ class SubStringMatch
 	}
 	
 	
-	
 	SubStringMatch() throws Exception
 	{
 		String str1 = "Hi this is manoj, working in konylabs and working thet company";
