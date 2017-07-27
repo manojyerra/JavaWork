@@ -3,6 +3,8 @@ import java.util.*;
 
 public class PI
 {
+	long totTimeToMultiply = 0;
+	
 	public static void main(String[] args)
 	{
  		long startTime = System.currentTimeMillis();
@@ -17,9 +19,7 @@ public class PI
 	
 	PI()
 	{
-		String result = Spigot();
-		
-		System.out.println(result);
+		Spigot();
 	}
 	
 	
@@ -191,7 +191,47 @@ public class PI
 	}
 	
 	
-	void Spigot()
+	BigDecimal Factorial(int val)
+	{
+		BigDecimal result = new BigDecimal(1.0);
+		
+		for(int i=1; i<= val; i++)
+			result = result.multiply( new BigDecimal(i) );
+		
+		return result;
+	}
+	
+	
+	public static BigDecimal sqrtBigDecimal(BigDecimal in, int scale)
+	{
+	    BigDecimal sqrt = new BigDecimal(1);
+    	sqrt.setScale(scale + 3, RoundingMode.FLOOR);
+	    BigDecimal store = new BigDecimal(in.toString());
+    
+    	boolean first = true;
+    
+	    do
+    	{
+        	if (!first)
+	        {
+    	        store = new BigDecimal(sqrt.toString());
+        	}
+	        else
+    	    {
+        		first = false; 
+	        }
+        
+    	    store.setScale(scale + 3, RoundingMode.FLOOR);
+        
+        	sqrt = in.divide(store, scale + 3, RoundingMode.FLOOR).add(store).divide( BigDecimal.valueOf(2), scale + 3, RoundingMode.FLOOR);
+	    }
+    	while (!store.equals(sqrt));
+    
+	    return sqrt.setScale(scale, RoundingMode.FLOOR);
+	}
+	
+	
+	String Spigot()
 	{
 		BigDecimal result = new BigDecimal(0.0);
 		
@@ -216,12 +256,46 @@ public class PI
 			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
 		}
 		
-		//System.out.println("\n\n"+result+"\n\n");
+		System.out.println("\n\n"+result+"\n\n");
+		
+		System.out.println("\n\n totTimeToMultiply : "+totTimeToMultiply+"\n\n");
 		
 		return result.toString();
 	}
 	
 	
+	// BigDecimal Spigot_Level_2(int startVal, int increment, int numTimes, int scale, BigDecimal startValSixTeenPow)
+	// {
+		// BigDecimal totalNumar = new BigDecimal(0.0);
+		// BigDecimal totalDenom = new BigDecimal(1.0);
+
+		// BigDecimal sixTeen = new  BigDecimal(16);
+		// BigDecimal sixTeenPow = new  BigDecimal(1.0);
+		
+		// BigDecimal sixTeenPowIncrement = new  BigDecimal(16).pow(increment);
+		
+		// for(int i=0; i<numTimes; i++)
+		// {
+			// NumarAndDenom nd = Spigot_Level_1(startVal+ (i*increment), startVal+((i+1)*increment));
+			
+			// long startTime = System.currentTimeMillis();
+			
+			// nd.denom = nd.denom.multiply( sixTeenPow );
+			
+			// totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
+			// totalDenom = totalDenom.multiply( nd.denom );
+			
+			// sixTeenPow = sixTeenPow.multiply( sixTeenPowIncrement );
+			
+			// totTimeToMultiply += System.currentTimeMillis() - startTime;
+		// }
+		
+		// BigDecimal result = totalNumar.divide( totalDenom.multiply(startValSixTeenPow), scale, RoundingMode.HALF_UP );
+		
+		// return result;
+	// }	
+	
+		
 	BigDecimal Spigot_Level_2(int startVal, int increment, int numTimes, int scale, BigDecimal startValSixTeenPow)
 	{
 		BigDecimal totalNumar = new BigDecimal(0.0);
@@ -232,25 +306,30 @@ public class PI
 		
 		BigDecimal sixTeenPowIncrement = new  BigDecimal(16).pow(increment);
 		
-		for(int i=0; i<numTimes; i++)
+		int endVal = startVal + increment * numTimes;
+		
+		for(int k=endVal ; k>startVal; k -= increment)
 		{
-			NumarAndDenom nd = Spigot_Level_1(startVal+ (i*increment), startVal+((i+1)*increment));
+			NumarAndDenom nd = Spigot_Level_1(k-increment, k);
 			
-			nd.denom = nd.denom.multiply( sixTeenPow );
+			long startTime = System.currentTimeMillis();
 			
 			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
 			totalDenom = totalDenom.multiply( nd.denom );
 			
-			sixTeenPow = sixTeenPow.multiply( sixTeenPowIncrement );
+			if(k-increment > 0)
+				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
+			
+			totTimeToMultiply += System.currentTimeMillis() - startTime;
 		}
-		
+	
 		BigDecimal result = totalNumar.divide( totalDenom.multiply(startValSixTeenPow), scale, RoundingMode.HALF_UP );
 		
 		return result;
-	}	
-		
+	}		
 	
-	NumarAndDenom Spigot_Level_1(int statVal, int endVal)
+	
+	NumarAndDenom Spigot_Level_1(int startVal, int endVal)
 	{
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
@@ -259,14 +338,14 @@ public class PI
 		
 		NumarAndDenom ele = Element( 0 );
 		
-		for(int k=endVal-1 ; k>=statVal; k--)
+		for(int k=endVal-1 ; k>=startVal; k--)
 		{
 			NumarAndDenom elementND = Element( k );
 						
 			totalNumar = totalNumar.multiply( elementND.denom ).add( totalDenom.multiply( elementND.numar ) );
 			totalDenom = totalDenom.multiply( elementND.denom );
 		
-			if(k != statVal)
+			if(k != startVal)
 				totalDenom = totalDenom.multiply( sixTeen );
 		}
 		

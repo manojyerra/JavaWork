@@ -1,13 +1,65 @@
-
+import java.util.*;
 
 class MagicSquares
 {
 	public static void main(String args[])
 	{
+	 	long startTime = System.currentTimeMillis();
+		
 		new MagicSquares();
+
+		long timeTaken = System.currentTimeMillis() - startTime;
+		
+		System.out.println("\n\nTime taken : "+(double)timeTaken/1000.0+" seconds\n\n");
 	}
 	
 	MagicSquares()
+	{
+		CalcUsingThreads(0, 50, 3, 150);
+		
+		//Calc(0, 100, 100);
+	}
+
+	void CalcUsingThreads(int startVal, int increment, int numThreads, int maxVal)
+	{
+		final int incrementConst = increment;
+		final int max = maxVal;
+	
+		Vector<Thread> vec = new Vector<Thread>();
+		
+		for(int i=0; i<numThreads; i++)
+		{
+			final int start = startVal;
+			final int end = startVal + incrementConst;
+				
+			vec.add( new Thread(new Runnable() { @Override public void run() 
+			{
+				
+				Calc(start, end, max);
+				
+			}}));
+			
+			startVal += incrementConst;
+		}
+		
+		System.out.println("\n\n Going to invoke all threads... \n\n");
+
+		for(int i=0; i<numThreads; i++)
+		{
+			vec.get(i).start();
+		}
+
+		System.out.println("\n\n All threads invoked... \n\n");
+
+		for(int i=0; i<numThreads; i++)
+		{
+			try { vec.get(i).join(); } catch(Exception e){ e.printStackTrace(); }			
+		}
+
+		System.out.println("\n\n All threads job done ... \n\n");
+	}	
+	
+	void Calc(int aStartVal, int aEndVal, int max)
 	{
 		int a = 1;
 		int b = 1;
@@ -19,19 +71,19 @@ class MagicSquares
 		int h = 1;
 		int i = 1;
 		
-		int max = 200;
-		
-		for(a=1; a<max; a++)
+		for(a=aStartVal; a<aEndVal; a++)
 		{
 			int aPow2 = a*a;
 		
+			System.out.println(a+", "+b);
+			
 			for(b=1; b<max; b++)
 			{
 				if(a == b) continue;
 
 				int bPow2 = b*b;
 									
-				System.out.println(a+", "+b);
+				//System.out.println(a+", "+b);
 									
 				for(c=1; c<max; c++)
 				{
