@@ -3,8 +3,6 @@ import java.util.*;
 
 public class PI
 {
-	Vector<BigDecimal> vecBigDeci = new Vector<BigDecimal>();
-	
 	public static void main(String[] args)
 	{
  		long startTime = System.currentTimeMillis();
@@ -16,11 +14,188 @@ public class PI
 		System.out.println("\n\nTime taken : "+timeTaken+" milli seconds\n\n");		
     }
 	
+	
 	PI()
+	{
+		String result = Spigot();
+		
+		System.out.println(result);
+	}
+	
+	
+	String Gregory_Leibniz_Series()
 	{
 		BigDecimal result = new BigDecimal(0.0);
 		
-		//Apporx for 1000,000 is 114 seconds. ( less than 2 minutes ).
+		boolean positiveSign = true;
+		
+		for(long i=1; i<100000; i+=2)
+		{
+			if(positiveSign)
+			{
+				result = result.add( BigDecimal.ONE.divide( new BigDecimal(i), 1000, RoundingMode.HALF_UP ) );
+			}
+			else
+			{
+				result = result.subtract( BigDecimal.ONE.divide( new BigDecimal(i), 1000, RoundingMode.HALF_UP ) );			
+			}			
+										
+			positiveSign = !positiveSign;
+		}
+		
+		return ""+result.multiply( new BigDecimal(4.0) );
+	}
+
+
+	String Nilakantha_Series()
+	{
+		BigDecimal result = new BigDecimal(0.0);
+		
+		boolean positiveSign = true;
+		
+		for(long i=2; i<100000; i+=2)
+		{
+			BigDecimal numar = (new BigDecimal(i)).multiply(new BigDecimal(i+1)).multiply(new BigDecimal(i+2));
+			
+			if(positiveSign)
+			{
+				result = result.add( BigDecimal.ONE.divide( numar, 1000, RoundingMode.HALF_UP ) );
+			}
+			else
+			{
+				result = result.subtract( BigDecimal.ONE.divide( numar, 1000, RoundingMode.HALF_UP ) );			
+			}			
+										
+			positiveSign = !positiveSign;
+		}
+		
+		return ""+result.multiply( new BigDecimal(4.0) ).add(new BigDecimal(3.0));
+	}
+	
+	
+	String WithSquares()
+	{
+		BigDecimal result = new BigDecimal(0.0);
+		
+		for(long i=1; i<100000; i++)
+		{
+			BigDecimal square = new BigDecimal(i).multiply(new BigDecimal(i));
+			
+			result = result.add( BigDecimal.ONE.divide(square, 1000, RoundingMode.HALF_UP ) );
+		}
+		
+		return ""+sqrtBigDecimal ( result.multiply( new BigDecimal(6.0) ), 1024 );
+	}
+	
+	
+	String RamanujanPIFormula()
+	{
+		//double val = 9801.0 / ( 2206.0 * Math.sqrt(2.0) );
+		//return ""+val;
+
+		double mulFactor = 2.0 * Math.sqrt(2.0) / 9801.0;
+		
+		BigDecimal mulFactorBigDecimal = new BigDecimal( mulFactor );
+		
+		BigDecimal _4 = new BigDecimal(4);
+		BigDecimal _1103 = new BigDecimal(1103);
+		BigDecimal _26390 = new BigDecimal(26390);
+		BigDecimal _396 = new BigDecimal(396);
+
+		BigDecimal sum = new BigDecimal(0.0);
+				
+		for(int k=0; k<100; k++)
+		{			
+			BigDecimal numer = Factorial( 4*k ).multiply( _1103.add( _26390.multiply( new BigDecimal(k) ) ) ) ;
+			
+			BigDecimal denom = Factorial(k).pow(4).multiply( _396.pow( 4*k ) );
+			
+			sum = sum.add ( numer.divide( denom, 1000, RoundingMode.HALF_UP ) );
+		}
+		
+		sum = sum.multiply(mulFactorBigDecimal);
+		
+		sum = BigDecimal.ONE.divide( sum, 1000, RoundingMode.HALF_UP );
+		
+		return ""+sum;
+	}
+	
+	
+	String ChudnovskyFormula()
+	{
+		BigDecimal _13591409 = new BigDecimal( 13591409 );
+		BigDecimal _545140134 = new BigDecimal( 545140134 );
+		BigDecimal _640320 = new BigDecimal( 640320 );
+		
+		BigDecimal result = new BigDecimal(0.0);
+		
+		for(int k=0; k<1; k++)
+		{
+			BigDecimal numar = Factorial( 6*k ).multiply( _13591409.add( _545140134.multiply( new BigDecimal(k) ) ) );
+			
+			BigDecimal denom = Factorial(k).pow(3).multiply( Factorial( 3*k ) ).multiply( _640320.pow(3*k) );
+		
+			if(k % 2 == 0)
+			{
+				result = result.add( numar.divide( denom, 10000, RoundingMode.HALF_UP ) );
+			}
+			else
+			{
+				result = result.subtract( numar.divide( denom, 10000, RoundingMode.HALF_UP ) );
+			}
+		}
+		
+		BigDecimal sqrtVal = sqrtBigDecimal(new BigDecimal(10005), 100000);
+		
+		result = result.multiply ( sqrtVal ). divide( new BigDecimal(4270934400.0), 10000, RoundingMode.HALF_UP );
+		
+		result = BigDecimal.ONE.divide( result, 10000, RoundingMode.HALF_UP);
+			
+		return ""+result;
+	}
+	
+	
+	String ABTP()
+	{
+		BigDecimal a = new BigDecimal( 1.0 );
+    	BigDecimal b = new BigDecimal( 1.0 / Math.sqrt(2.0) );
+    	BigDecimal t = new BigDecimal( 1.0 / 4.0 );
+    	BigDecimal p = new BigDecimal( 1.0 );
+
+		for(int i=0; i<2000; i++)
+		{
+			BigDecimal a1 = a.add(b).divide( new BigDecimal(2.0) );
+			
+			BigDecimal b1 = sqrtBigDecimal ( a.multiply(b), 1024 );
+
+			BigDecimal aSubtract = a.subtract(a1);
+
+			BigDecimal t1 = t.subtract( p.multiply( aSubtract.multiply(aSubtract) ) );
+			
+			BigDecimal p1 = p.multiply( new BigDecimal(2.0) );
+			
+			a = a1;
+			b = b1;
+			t = t1;
+			p = p1;
+		}
+		
+		BigDecimal aPlusB = a.add(b);
+		BigDecimal aPlusBSquare = aPlusB.multiply( aPlusB );
+		
+		BigDecimal denom = t.multiply( new BigDecimal(4.0) );
+				
+		BigDecimal result = aPlusBSquare.divide(denom, 1000, RoundingMode.HALF_UP);
+
+		return ""+result;		
+	}
+	
+	
+	void Spigot()
+	{
+		BigDecimal result = new BigDecimal(0.0);
+		
+		//Time taken for 1 Million ( 1000,000 ) is 114 secnods.
 		
 		int increment 	= 10000;
 		int max 		= 1000000;
@@ -41,9 +216,11 @@ public class PI
 			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
 		}
 		
-		System.out.println("\n\n"+result+"\n\n");
+		//System.out.println("\n\n"+result+"\n\n");
+		
+		return result.toString();
 	}
-
+	
 	
 	BigDecimal Spigot_Level_2(int startVal, int increment, int numTimes, int scale, BigDecimal startValSixTeenPow)
 	{
@@ -72,6 +249,7 @@ public class PI
 		return result;
 	}	
 		
+	
 	NumarAndDenom Spigot_Level_1(int statVal, int endVal)
 	{
 		BigDecimal totalNumar = new BigDecimal(0.0);
@@ -100,6 +278,7 @@ public class PI
 		return numerAndDenom;
 	}
 
+	
 	NumarAndDenom Element(int k)
 	{
 		BigDecimal two = new BigDecimal(2.0);
@@ -124,8 +303,9 @@ public class PI
 		numerAndDenom.denom = denom;	
 		
 		return numerAndDenom;
-	}	
+	}
 
+	
 	// NumarAndDenom Spigot_Level_1(int startVal, int endVal)
 	// {		
 		// BigDecimal two = new BigDecimal(2.0);
@@ -164,6 +344,57 @@ public class PI
 		// numerAndDenom.denom = totalDenom;		
 		
 		// return numerAndDenom;
+	// }
+	
+	
+	// BigDecimal SpigotUsingThreads(int startVal, int increment, int numThreads, int scale)
+	// {
+		// final int incrementConst = increment;
+		// final int scaleConst = scale;
+	
+		// Vector<Thread> vec = new Vector<Thread>();
+		
+		// for(int i=0; i<numThreads; i++)
+		// {
+			// final int start = startVal;
+			// final int end = startVal + incrementConst;
+				
+			// vec.add( new Thread(new Runnable() { @Override public void run() 
+			// {
+				
+				// vecBigDeci.add( Spigot1( start, end, scaleConst) );
+				
+			// }}));
+			
+			// startVal += incrementConst;
+		// }
+		
+		// System.out.println("\n\n Going to invoke all threads... \n\n");
+
+		// for(int i=0; i<numThreads; i++)
+		// {
+			// vec.get(i).start();
+		// }
+
+		// System.out.println("\n\n All threads invoked... \n\n");
+
+		// for(int i=0; i<numThreads; i++)
+		// {
+			// try { vec.get(i).join(); } catch(Exception e){ e.printStackTrace(); }			
+		// }
+
+		// System.out.println("\n\n All threads job done ... \n\n");
+		
+		// BigDecimal result = new BigDecimal(0);
+		
+		// for(int i=0; i<numThreads; i++)
+		// {
+			// result = result.add( vecBigDeci.get(i) );
+		// }
+		
+		// System.out.println( result );
+		
+		// return result;
 	// }
 }
 

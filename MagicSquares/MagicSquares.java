@@ -121,6 +121,7 @@ class MagicSquares
 												continue;
 											
 											System.out.println(a+","+b+","+c+","+d+","+e+","+f+","+g+","+h+","+i);
+											System.exit(1);
 											
 											a = max + 1;
 											b = max + 1;
