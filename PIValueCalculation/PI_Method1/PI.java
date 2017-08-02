@@ -9,19 +9,24 @@ public class PI
 	
 	public static void main(String[] args)
 	{
- 		long startTime = System.currentTimeMillis();
-		
-		new PI();
-
-		long timeTaken = System.currentTimeMillis() - startTime;
-		
-		System.out.println("\n\nTime taken : "+timeTaken+" milli seconds\n\n");		
+		new PI();	
     }
 	
 	
 	PI()
 	{
-		Spigot();
+		long startTime = System.currentTimeMillis();
+		
+		BigDecimal result = Spigot();
+		
+		long timeTaken = System.currentTimeMillis() - startTime;
+		
+		System.out.println("\n\n"+result+"\n\n");
+		
+		//System.out.println("\n\n totTimeToMultiply : "+totTimeToMultiply+"\n\n");
+		//System.out.println("\n\n totTimeToDivide : "+totTimeToDivide+"\n\n");
+		
+		System.out.println("\n\nTime taken : "+timeTaken+" milli seconds\n\n");				
 	}
 	
 	
@@ -233,10 +238,8 @@ public class PI
 	}
 	
 	
-	String Spigot()
+	BigDecimal Spigot()
 	{
-		BigDecimal result = new BigDecimal(0.0);
-		
 		//Time taken for 1 Million ( 1000,000 ) is 100 secnods.
 		
 		//Set increment as 2000 when max value is 100000		
@@ -244,11 +247,13 @@ public class PI
 		//Time taken ~ 4300 milli secnods		
 		
 		//Set increment as 20000 when max value is 1000,000 
-		//increment/10, 10 as parameters for Spigot_Level_3
-		//Time taken ~ 100000 milli seconds
+		//increment/5, 5 as parameters for Spigot_Level_3
+		//Time taken ~ 87000 milli seconds
 		
 		int increment 	= 20000;
 		int max 		= 1000000;
+		
+		BigDecimal result = new BigDecimal(0.0);		
 		
 		BigDecimal sixTeenPowStartVal = new BigDecimal(1.0);
 		BigDecimal sixTeenPowIncrement = new BigDecimal(16).pow(increment);
@@ -266,13 +271,7 @@ public class PI
 			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
 		}
 		
-		System.out.println("\n\n"+result+"\n\n");
-		
-		System.out.println("\n\n totTimeToMultiply : "+totTimeToMultiply+"\n\n");
-		System.out.println("\n\n totTimeToDivide : "+totTimeToDivide+"\n\n");
-		
-		
-		return result.toString();
+		return result;
 	}
 	
 		
@@ -297,20 +296,14 @@ public class PI
 			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
 			totalDenom = totalDenom.multiply( nd.denom );
 			
-			if(k-increment > 0)
+			if(k-increment != startVal)
 				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
-			
-			if(totalNumar.scale() > scale)
-			{
-				System.out.println("Numar Scale : "+totalNumar.scale());
-				totalNumar = totalNumar.setScale(scale);
-			}
-			
-			if(totalDenom.scale() > scale)
-				totalDenom = totalDenom.setScale(scale);
 			
 			totTimeToMultiply += System.currentTimeMillis() - startTime;
 		}
+		
+		// System.out.println("totalNumar precision : "+totalNumar.precision());
+		// System.out.println("totalDenom precision : "+totalDenom.precision());
 	
 		long divideStartTime = System.currentTimeMillis();
 		
@@ -319,10 +312,13 @@ public class PI
 		totTimeToDivide += System.currentTimeMillis() - divideStartTime;
 		
 		return result;
-	}		
+	}
+	
 	
 	NumarAndDenom Spigot_Level_2(int startVal, int increment, int numTimes, int scale)
 	{
+		//System.out.println("L2 : "+startVal+" , "+(startVal+increment*numTimes));
+				
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
 
@@ -342,11 +338,14 @@ public class PI
 			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
 			totalDenom = totalDenom.multiply( nd.denom );
 			
-			if(k-increment > 0)
+			if(k-increment != startVal)
 				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
 			
 			totTimeToMultiply += System.currentTimeMillis() - startTime;
 		}
+		
+		//System.out.println("totalNumar precision : "+totalNumar.precision());
+		//System.out.println("totalDenom precision : "+totalDenom.precision());
 		
 		NumarAndDenom numerAndDenom = new NumarAndDenom();
 		
@@ -358,6 +357,8 @@ public class PI
 	
 	NumarAndDenom Spigot_Level_1(int startVal, int endVal)
 	{
+		//System.out.println("L1 : "+startVal+" , "+endVal);
+		
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
 		
@@ -506,3 +507,18 @@ class NumarAndDenom
 	public BigDecimal numar;
 	public BigDecimal denom;
 }
+
+
+			//if(totalNumar.precision() > scale/2)
+			//{
+				//System.out.println("totalNumar precision : "+totalNumar.precision());
+				
+			//	totalNumar = totalNumar.round( new MathContext(scale/2) );
+			//}
+			
+			//if(totalDenom.precision() > scale/2)
+			//{
+				//System.out.println("totalDenom precision : "+totalDenom.precision());
+					
+				//totalDenom = totalDenom.round( new MathContext(scale/2) );			
+			//}
