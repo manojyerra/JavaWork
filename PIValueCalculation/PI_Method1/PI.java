@@ -257,7 +257,7 @@ public class PI
 		
 		for(int i=0; i<max; i+=increment)
 		{
-			result = result.add( Spigot_Level_3(i, increment/10, 10, max, sixTeenPowStartVal) );
+			result = result.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
 			
 			long timeTaken = System.currentTimeMillis() - startTime;
 			
@@ -331,6 +331,15 @@ public class PI
 			
 			if(k-increment > 0)
 				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
+			
+			if(totalNumar.scale() > scale)
+			{
+				System.out.println("Numar Scale : "+totalNumar.scale());
+				totalNumar = totalNumar.setScale(scale);
+			}
+			
+			if(totalDenom.scale() > scale)
+				totalDenom = totalDenom.setScale(scale);
 			
 			totTimeToMultiply += System.currentTimeMillis() - startTime;
 		}
