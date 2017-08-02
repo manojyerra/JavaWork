@@ -289,7 +289,7 @@ public class PI
 		
 		for(int k=endVal ; k>startVal; k -= increment)
 		{
-			NumarAndDenom nd = Spigot_Level_2(k-increment, increment/10, 10, scale);
+			NumarAndDenom nd = Spigot_Level_2(k-increment, increment/10, 10);
 			
 			long startTime = System.currentTimeMillis();
 			
@@ -315,7 +315,7 @@ public class PI
 	}
 	
 	
-	NumarAndDenom Spigot_Level_2(int startVal, int increment, int numTimes, int scale)
+	NumarAndDenom Spigot_Level_2(int startVal, int increment, int numTimes)
 	{
 		//System.out.println("L2 : "+startVal+" , "+(startVal+increment*numTimes));
 				
