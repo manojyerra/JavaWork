@@ -6,6 +6,7 @@ public class PI
 	long totTimeToMultiply = 0;
 	long totTimeToDivide = 0;
 	
+	long spigotStartTime = 0;
 	
 	public static void main(String[] args)
 	{
@@ -233,10 +234,8 @@ public class PI
 	}
 	
 	
-	String Spigot()
-	{
-		BigDecimal result = new BigDecimal(0.0);
-		
+	void Spigot()
+	{		
 		//Time taken for 1 Million ( 1000,000 ) is 100 secnods.
 		
 		//Set increment as 2000 when max value is 100000		
@@ -247,36 +246,19 @@ public class PI
 		//increment/10, 10 as parameters for Spigot_Level_3
 		//Time taken ~ 100000 milli seconds
 		
-		int increment 	= 20000;
+		
+		//int increment 	= 1000000;
 		int max 		= 1000000;
 		
-		BigDecimal sixTeenPowStartVal = new BigDecimal(1.0);
-		BigDecimal sixTeenPowIncrement = new BigDecimal(16).pow(increment);
-		
-		long startTime = System.currentTimeMillis();
-		
-		for(int i=0; i<max; i+=increment)
-		{
-			result = result.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
-			
-			long timeTaken = System.currentTimeMillis() - startTime;
-			
-			System.out.println("Iteration : "+(i+increment)+" time : "+timeTaken);
-			
-			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
-		}
-		
+		spigotStartTime = System.currentTimeMillis();
+	
+		BigDecimal result = Spigot_Level_6(0, max, 1, max);
+
 		System.out.println("\n\n"+result+"\n\n");
-		
-		System.out.println("\n\n totTimeToMultiply : "+totTimeToMultiply+"\n\n");
-		System.out.println("\n\n totTimeToDivide : "+totTimeToDivide+"\n\n");
-		
-		
-		return result.toString();
 	}
 	
-		
-	BigDecimal Spigot_Level_3(int startVal, int increment, int numTimes, int scale, BigDecimal startValSixTeenPow)
+	
+	BigDecimal Spigot_Level_6(int startVal, int increment, int numTimes, int scale)
 	{
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
@@ -290,7 +272,7 @@ public class PI
 		
 		for(int k=endVal ; k>startVal; k -= increment)
 		{
-			NumarAndDenom nd = Spigot_Level_2(k-increment, increment/10, 10, scale);
+			NumarAndDenom nd = Spigot_Level_4(k-increment, increment/10, 10);
 			
 			long startTime = System.currentTimeMillis();
 			
@@ -300,29 +282,131 @@ public class PI
 			if(k-increment > 0)
 				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
 			
-			if(totalNumar.scale() > scale)
-			{
-				System.out.println("Numar Scale : "+totalNumar.scale());
-				totalNumar = totalNumar.setScale(scale);
-			}
-			
-			if(totalDenom.scale() > scale)
-				totalDenom = totalDenom.setScale(scale);
-			
 			totTimeToMultiply += System.currentTimeMillis() - startTime;
 		}
 	
 		long divideStartTime = System.currentTimeMillis();
 		
-		BigDecimal result = totalNumar.divide( totalDenom.multiply(startValSixTeenPow), scale, RoundingMode.HALF_UP );
+		BigDecimal result = totalNumar.divide( totalDenom, scale, RoundingMode.HALF_UP );
 		
 		totTimeToDivide += System.currentTimeMillis() - divideStartTime;
 		
 		return result;
 	}		
-	
-	NumarAndDenom Spigot_Level_2(int startVal, int increment, int numTimes, int scale)
+
+	NumarAndDenom Spigot_Level_5(int startVal, int increment, int numTimes)
 	{
+		BigDecimal totalNumar = new BigDecimal(0.0);
+		BigDecimal totalDenom = new BigDecimal(1.0);
+
+		BigDecimal sixTeen = new  BigDecimal(16);
+		BigDecimal sixTeenPow = new  BigDecimal(1.0);
+		
+		BigDecimal sixTeenPowIncrement = new  BigDecimal(16).pow(increment);
+		
+		int endVal = startVal + increment * numTimes;
+		
+		for(int k=endVal ; k>startVal; k -= increment)
+		{
+			NumarAndDenom nd = Spigot_Level_4(k-increment, increment/10, 10);
+			
+			long startTime = System.currentTimeMillis();
+			
+			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
+			totalDenom = totalDenom.multiply( nd.denom );
+			
+			if(k-increment > 0)
+				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
+			
+			totTimeToMultiply += System.currentTimeMillis() - startTime;
+		}
+		
+		NumarAndDenom numarAndDenom = new NumarAndDenom();
+		
+		numarAndDenom.numar = totalNumar;
+		numarAndDenom.denom = totalDenom;
+		
+		return numarAndDenom;		
+	}		
+	
+	NumarAndDenom Spigot_Level_4(int startVal, int increment, int numTimes)
+	{
+		System.out.println(startVal+" : "+(System.currentTimeMillis() - spigotStartTime));
+		
+		BigDecimal totalNumar = new BigDecimal(0.0);
+		BigDecimal totalDenom = new BigDecimal(1.0);
+
+		BigDecimal sixTeen = new  BigDecimal(16);
+		BigDecimal sixTeenPow = new  BigDecimal(1.0);
+		
+		BigDecimal sixTeenPowIncrement = new  BigDecimal(16).pow(increment);
+		
+		int endVal = startVal + increment * numTimes;
+		
+		for(int k=endVal ; k>startVal; k -= increment)
+		{
+			NumarAndDenom nd = Spigot_Level_3(k-increment, increment/10, 10);
+			
+			long startTime = System.currentTimeMillis();
+			
+			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
+			totalDenom = totalDenom.multiply( nd.denom );
+			
+			if(k-increment > 0)
+				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
+			
+			totTimeToMultiply += System.currentTimeMillis() - startTime;
+		}
+		
+		NumarAndDenom numarAndDenom = new NumarAndDenom();
+		
+		numarAndDenom.numar = totalNumar;
+		numarAndDenom.denom = totalDenom;
+		
+		return numarAndDenom;		
+	}		
+		
+	NumarAndDenom Spigot_Level_3(int startVal, int increment, int numTimes)
+	{	
+		System.out.println(startVal+" : "+(System.currentTimeMillis() - spigotStartTime));
+	
+		BigDecimal totalNumar = new BigDecimal(0.0);
+		BigDecimal totalDenom = new BigDecimal(1.0);
+
+		BigDecimal sixTeen = new  BigDecimal(16);
+		BigDecimal sixTeenPow = new  BigDecimal(1.0);
+		
+		BigDecimal sixTeenPowIncrement = new  BigDecimal(16).pow(increment);
+		
+		int endVal = startVal + increment * numTimes;
+		
+		for(int k=endVal ; k>startVal; k -= increment)
+		{
+			NumarAndDenom nd = Spigot_Level_2(k-increment, increment/10, 10);
+			
+			long startTime = System.currentTimeMillis();
+			
+			totalNumar = totalNumar.multiply( nd.denom ).add( totalDenom.multiply( nd.numar ) );
+			totalDenom = totalDenom.multiply( nd.denom );
+			
+			if(k-increment > 0)
+				totalDenom = totalDenom.multiply( sixTeenPowIncrement );
+			
+			totTimeToMultiply += System.currentTimeMillis() - startTime;
+		}
+		
+		NumarAndDenom numarAndDenom = new NumarAndDenom();
+		
+		numarAndDenom.numar = totalNumar;
+		numarAndDenom.denom = totalDenom;
+		
+		return numarAndDenom;
+	}		
+	
+	NumarAndDenom Spigot_Level_2(int startVal, int increment, int numTimes)
+	{
+		System.out.println("L2 : "+(startVal)+" : "+(System.currentTimeMillis() - spigotStartTime));
+		
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
 
@@ -358,6 +442,8 @@ public class PI
 	
 	NumarAndDenom Spigot_Level_1(int startVal, int endVal)
 	{
+		//System.out.println("L1 : "+(endVal - startVal)+" : "+(System.currentTimeMillis() - spigotStartTime));
+		
 		BigDecimal totalNumar = new BigDecimal(0.0);
 		BigDecimal totalDenom = new BigDecimal(1.0);
 		
@@ -408,6 +494,55 @@ public class PI
 		
 		return numerAndDenom;
 	}
+
+	
+	// NumarAndDenom Element2(int k)
+	// {
+		// final BigDecimal two = new BigDecimal(2.0);
+		// final BigDecimal four = new BigDecimal(4.0);
+		// final BigDecimal sixTeen = new BigDecimal(16.0);
+		
+		// long _8k = 8 * k;
+		
+		// final BigDecimal a0 = new BigDecimal( _8k + 1 );
+		// final BigDecimal b0 = new BigDecimal( _8k + 4 );
+		// final BigDecimal c0 = new BigDecimal( _8k + 5 );
+		// final BigDecimal d0 = new BigDecimal( _8k + 6 );
+
+		// BigDecimal const0_1 = four.multiply(b0).multiply(c0).multiply(d0);
+		// BigDecimal const0_2 = two.multiply(a0).multiply(c0).multiply(d0);
+		// BigDecimal const0_3 = a0.multiply(b0).multiply(d0);
+		// BigDecimal const0_4 = a0.multiply(b0).multiply(c0);
+			
+		// BigDecimal x0 = const0_1.subtract( const0_2.add(const0_3.add(const0_4)));
+		// BigDecimal y0 = a0.multiply(b0).multiply(c0).multiply(d0);
+		
+
+		// final BigDecimal a1 = new BigDecimal( _8k + 9 );
+		// final BigDecimal b1 = new BigDecimal( _8k + 12 );
+		// final BigDecimal c1 = new BigDecimal( _8k + 13 );
+		// final BigDecimal d1 = new BigDecimal( _8k + 14 );
+
+		// BigDecimal const1_1 = four.multiply(b1).multiply(c1).multiply(d1);
+		// BigDecimal const1_2 = two.multiply(a1).multiply(c1).multiply(d1);
+		// BigDecimal const1_3 = a1.multiply(b1).multiply(d1);
+		// BigDecimal const1_4 = a1.multiply(b1).multiply(c1);
+			
+		// BigDecimal x1 = const1_1.subtract( const1_2.add(const1_3.add(const1_4)));
+		// BigDecimal y1 = a1.multiply(b1).multiply(c1).multiply(d1);
+
+		// BigDecimal sixTeenY1 = sixTeen.multiply( y1 );
+		
+		// BigDecimal numar = sixTeenY1.multiply( x0 ).add( x1.multiply(y0) );
+		// BigDecimal denom = sixTeenY1.multiply( y0 );
+		
+		// NumarAndDenom numerAndDenom = new NumarAndDenom();
+		
+		// numerAndDenom.numar = numar;
+		// numerAndDenom.denom = denom;	
+		
+		// return numerAndDenom;
+	// }
 	
 	// NumarAndDenom Spigot_Level_1(int startVal, int endVal)
 	// {		
