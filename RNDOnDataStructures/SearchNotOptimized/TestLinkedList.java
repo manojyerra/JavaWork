@@ -5,7 +5,7 @@ import java.util.Map;
 
 class TestLinkedList
 {
-	static void Add(HashMap<Integer, Integer> map, LinkedList<Integer> obj)
+	static void Perform(HashMap<Integer, Integer> map, LinkedList<Integer> obj)
 	{		
 		for(Map.Entry m: map.entrySet())
 		{  

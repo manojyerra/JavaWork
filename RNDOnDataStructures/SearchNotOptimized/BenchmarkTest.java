@@ -44,27 +44,27 @@ class BenchmarkTest
 		System.out.println("Performing "+numOperations+" operations...\n");
 
 		long startTime = System.currentTimeMillis();		
-		TestLinkedArray.Add(map, linkedArr);
+		TestLinkedArray.Perform(map, linkedArr);
 		System.out.println("Time for LinkedArray : "+(float)(System.currentTimeMillis()-startTime)/1000.0f+" seconds");
 
 		if(testWithArrayList)
 		{
 			startTime = System.currentTimeMillis();
-			TestArrayList.Add(map, arrayList);
+			TestArrayList.Perform(map, arrayList);
 			System.out.println("Time for ArrayList   : "+(float)(System.currentTimeMillis()-startTime)/1000.0f+" seconds");
 		}
 		
 		if(testWithVector)
 		{
 			startTime = System.currentTimeMillis();
-			TestVector.Add(map, vector);
+			TestVector.Perform(map, vector);
 			System.out.println("Time for Vector      : "+(float)(System.currentTimeMillis()-startTime)/1000.0f+" seconds");
 		}
 		
 		if(testWithLinkedList)
 		{
 			startTime = System.currentTimeMillis();
-			TestLinkedList.Add(map, linkedList);
+			TestLinkedList.Perform(map, linkedList);
 			System.out.println("Time for LinkedList  : "+(float)(System.currentTimeMillis()-startTime)/1000.0f+" seconds");
 		}
 		

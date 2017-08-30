@@ -4,7 +4,7 @@ import java.util.Map;
 
 class TestLinkedArray
 {
-	static void Add(HashMap<Integer, Integer> map, LinkedArray<Integer> obj)
+	static void Perform(HashMap<Integer, Integer> map, LinkedArray<Integer> obj)
 	{		
 		for(Map.Entry m: map.entrySet())
 		{  

@@ -5,7 +5,7 @@ import java.util.Map;
 
 class TestVector
 {
-	static void Add(HashMap<Integer, Integer> map, Vector<Integer> obj)
+	static void Perform(HashMap<Integer, Integer> map, Vector<Integer> obj)
 	{		
 		for(Map.Entry m: map.entrySet())
 		{  

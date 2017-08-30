@@ -5,7 +5,7 @@ import java.util.Map;
 
 class TestArrayList
 {
-	static void Add(HashMap<Integer, Integer> map, ArrayList<Integer> obj)
+	static void Perform(HashMap<Integer, Integer> map, ArrayList<Integer> obj)
 	{		
 		for(Map.Entry m: map.entrySet())
 		{  
