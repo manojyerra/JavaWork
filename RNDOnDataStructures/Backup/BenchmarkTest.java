@@ -22,7 +22,27 @@ class BenchmarkTest
 	{
 		new BenchmarkTest();		
 	}
-		
+	
+int GetNumTuples(int[] a, int[] b)
+{
+    HashSet<Integer> aMap = new HashSet<Integer>();
+    
+    for(int i=0; i<a.length; i++)
+       aMap.put(new Integer(a[i]));
+       
+    int tupleCount = 0;
+    
+    for(int i=0; i<b.length; i++)
+    {
+        Integer findInt = new Integer(-b[i]);
+        
+        if(aMap.contains(findInt))
+           tupleCount++;
+    }
+    
+    return tupleCount;
+}
+	
 	BenchmarkTest()
 	{
 		System.out.print("\n\nCreating map with random values..");

@@ -4,11 +4,11 @@ import java.util.*;
 
 class BigPrimeFactor
 {
-	HashMap<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+	HashMap<BigDecimal, Integer> map = new HashMap<BigDecimal, Integer>();
 	
 	BigPrimeFactor()
 	{
-		map.put("1", BigDecimal.ONE);
+		map.put(new BigDecimal(1), 1);
 	}
 	
 	BigPrimeFactor(String str)
@@ -21,56 +21,140 @@ class BigPrimeFactor
 		Init( n );
 	}
 	
+	// BigPrimeFactor(long n)
+	// {
+		// Iterator<BigDecimal> iterator = PrimList.vec.iterator();
+		// boolean run = true;
+	
+		// while(iterator.hasNext())
+		// {
+			// BigDecimal key = iterator.next();
+			// long keyLong = key.longValue();
+			
+			// while(keyLong < n)
+			// {
+				// if( n % keyLong == 0)
+				// {
+					// if(map.containsKey(key))
+					// {
+						// map.put(key, map.get(key) + 1);
+					// }
+					// else
+					// {
+						// map.put(key, 1);
+					// }
+					
+					// n = n.divide(key);
+				// }
+				// else
+				// {
+					// break;
+				// }
+			// }
+			
+			// if( n.compareTo(BigDecimal.ONE) == 0)
+			// {
+				// break;
+			// }	
+		// }
+		
+		// if( n.compareTo(BigDecimal.ONE) != 0)
+		// {
+			// //System.out.println(n);
+			
+			// map.put(n.add(BigDecimal.ZERO), 1);
+		// }
+		// else if(map.size() == 0)
+		// {			
+			// map.put(BigDecimal.ONE, 1);
+		// }		
+	// }
+	
 	void Init(BigDecimal n)
 	{
-		Iterator<String> iterator = PrimList.vec.iterator();
-		boolean run = true;
-	
-		while(iterator.hasNext())
+		n = new BigDecimal("123456789545477956595656232");
+		
+		BigDecimal min = new BigDecimal(100);
+		boolean loopAgain = false;
+		
+		do
 		{
-			String keyStr = iterator.next();
-			BigDecimal keyBI = new BigDecimal(keyStr);
+			loopAgain = false;
 			
-			while(keyBI.compareTo(n) <= 0)
+			Iterator<BigDecimal> iterator = PrimList.vec.iterator();
+			boolean run = true;
+	
+			while(iterator.hasNext())
 			{
-				if( n.remainder(keyBI).compareTo(BigDecimal.ZERO) == 0)
+				BigDecimal key = iterator.next();
+				
+				while(key.compareTo(n) <= 0)
 				{
-					if(map.containsKey(keyStr))
+					//if( n.remainder(key).compareTo(BigDecimal.ZERO) == 0)
+					if( isMultipleOf(n, key) )
 					{
-						map.put(keyStr, map.get(keyStr).add(BigDecimal.ONE));
+						if(map.containsKey(key))
+						{
+							map.put(key, map.get(key) + 1);
+						}
+						else
+						{
+							map.put(key, 1);
+						}
+						
+						n = n.divide(key);
 					}
 					else
 					{
-						map.put(keyStr, BigDecimal.ONE);
+						break;
 					}
-					
-					n = n.divide(keyBI);
 				}
-				else
-				{
+				
+				if( n.compareTo(BigDecimal.ONE) == 0)
+				{					
 					break;
 				}
 			}
-			
-			if( n.compareTo(BigDecimal.ONE) == 0)
+		
+			if(n.compareTo(min) > 0)
 			{
-				break;
+				// BigDecimal two = new BigDecimal(2);
+				// n = n.divide(two, 0, BigDecimal.ROUND_DOWN);
+				
+				BigDecimal[] remin = n.divideAndRemainder(BigDecimal.TEN);
+				
+				BigDecimal finalVal = remin[1].divide ( remin[0], n.precision() + 5, BigDecimal.ROUND_HALF_UP );
+				finalVal = finalVal.round( new MathContext(10) );
+		
+				n = remin[0];
+				
+				if(map.containsKey(finalVal))
+				{
+					map.put(finalVal, map.get(finalVal) + 1);
+				}
+				else
+				{
+					map.put(finalVal, 1);
+				}
+						
+				loopAgain = true;
 			}
 			
-		}
+		}while(loopAgain);
+		
 		
 		if( n.compareTo(BigDecimal.ONE) != 0)
 		{
 			//System.out.println(n);
 			
-			map.put(n.toString(), BigDecimal.ONE);
+			map.put(n.add(BigDecimal.ZERO), 1);
 		}
 		else if(map.size() == 0)
 		{			
-			map.put("1", BigDecimal.ONE);
+			map.put(BigDecimal.ONE, 1);
 		}
 		
-		//System.out.println(this);
+		System.out.println(this);
 	}
 	
 	public String toString()
@@ -78,22 +162,22 @@ class BigPrimeFactor
 		return map.toString();
 	}
 	
-	void put(String key, BigDecimal value)
+	void put(BigDecimal key, int value)
 	{
 		map.put(key, value);
 	}
 	
-	boolean containsKey(String key)
+	boolean containsKey(BigDecimal key)
 	{
 		return map.containsKey(key);
 	}
 	
-	BigDecimal getValue(String key)
+	int getValue(BigDecimal key)
 	{
 		return map.get(key);
 	}
 	
-	Iterator<String> getIterator()
+	Iterator<BigDecimal> getIterator()
 	{
 		return map.keySet().iterator();
 	}
@@ -102,19 +186,18 @@ class BigPrimeFactor
 	{
 		BigPrimeFactor result = new BigPrimeFactor();
 		
-		Iterator<String> iterator = getIterator();
+		Iterator<BigDecimal> iterator = getIterator();
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(bigPrime.containsKey(key))
 			{
-				BigDecimal value = new BigDecimal("0");
-				
-				value = value.add(getValue(key)).add(bigPrime.getValue(key));
+				int value = getValue(key) + bigPrime.getValue(key);
 				
 				//System.out.println("key1 : "+key+" : value : "+value);
+
 				result.put( key, value );
 			}
 			else
@@ -124,12 +207,11 @@ class BigPrimeFactor
 			}
 		}
 		
-		
 		iterator = bigPrime.getIterator();
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(!result.containsKey(key))
 			{
@@ -147,30 +229,29 @@ class BigPrimeFactor
 		BigPrimeFactor reminder1 = new BigPrimeFactor();
 		BigPrimeFactor reminder2 = new BigPrimeFactor();
 		
-		Iterator<String> iterator = getIterator();
+		Iterator<BigDecimal> iterator = getIterator();
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(bigPrime.containsKey(key))
 			{
-				BigDecimal value = new BigDecimal("0");
-				
-				if(getValue(key).longValue() > bigPrime.getValue(key).longValue())
+				if(getValue(key) > bigPrime.getValue(key))
 				{
 					result.put( key, bigPrime.getValue(key) );
 					
-					value = getValue(key).subtract(bigPrime.getValue(key));
-					reminder1.put(key, value);
+					int value = getValue(key) - bigPrime.getValue(key);
 					
+					reminder1.put(key, value);
 				}
 				else
 				{
 					result.put( key, getValue(key) );
 					
-					value = bigPrime.getValue(key).subtract(getValue(key));
-					if(value.longValue() != 0)
+					int value = getValue(key) - getValue(key);
+					
+					if(value != 0)
 						reminder2.put( key, value );
 				}
 			}
@@ -181,12 +262,11 @@ class BigPrimeFactor
 			}
 		}
 		
-		
 		iterator = bigPrime.getIterator();
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(!containsKey(key))
 			{
@@ -205,93 +285,91 @@ class BigPrimeFactor
 		return result.multiply(remnderFactor);
 	}
 	
-	BigPrimeFactor subtract(BigPrimeFactor bigPrime)
-	{
-		BigPrimeFactor result = new BigPrimeFactor();
-		BigPrimeFactor reminder1 = new BigPrimeFactor();
-		BigPrimeFactor reminder2 = new BigPrimeFactor();
+	// BigPrimeFactor subtract(BigPrimeFactor bigPrime)
+	// {
+		// BigPrimeFactor result = new BigPrimeFactor();
+		// BigPrimeFactor reminder1 = new BigPrimeFactor();
+		// BigPrimeFactor reminder2 = new BigPrimeFactor();
 		
-		Iterator<String> iterator = getIterator();
+		// Iterator<String> iterator = getIterator();
 	
-		while(iterator.hasNext())
-		{
-			String key = iterator.next();
+		// while(iterator.hasNext())
+		// {
+			// String key = iterator.next();
 			
-			if(bigPrime.containsKey(key))
-			{
-				BigDecimal value = new BigDecimal("0");
+			// if(bigPrime.containsKey(key))
+			// {
+				// BigDecimal value = new BigDecimal("0");
 				
-				if(getValue(key).longValue() > bigPrime.getValue(key).longValue())
-				{
-					result.put( key, bigPrime.getValue(key) );
+				// if(getValue(key).longValue() > bigPrime.getValue(key).longValue())
+				// {
+					// result.put( key, bigPrime.getValue(key) );
 					
-					value = getValue(key).subtract(bigPrime.getValue(key));
-					reminder1.put(key, value);
+					// value = getValue(key).subtract(bigPrime.getValue(key));
+					// reminder1.put(key, value);
 					
-				}
-				else
-				{
-					result.put( key, getValue(key) );
+				// }
+				// else
+				// {
+					// result.put( key, getValue(key) );
 					
-					value = bigPrime.getValue(key).subtract(getValue(key));
-					if(value.longValue() != 0)
-						reminder2.put( key, value );
-				}
-			}
-			else
-			{
-				//System.out.println("key11 : "+key+" : value : "+getValue(key));
-				reminder1.put( key, getValue(key) );			
-			}
-		}
+					// value = bigPrime.getValue(key).subtract(getValue(key));
+					// if(value.longValue() != 0)
+						// reminder2.put( key, value );
+				// }
+			// }
+			// else
+			// {
+				// //System.out.println("key11 : "+key+" : value : "+getValue(key));
+				// reminder1.put( key, getValue(key) );			
+			// }
+		// }
 		
 		
-		iterator = bigPrime.getIterator();
+		// iterator = bigPrime.getIterator();
 	
-		while(iterator.hasNext())
-		{
-			String key = iterator.next();
+		// while(iterator.hasNext())
+		// {
+			// String key = iterator.next();
 			
-			if(!containsKey(key))
-			{
-				//System.out.println("key22 : "+key+" : value : "+bigPrime.getValue(key));
-				reminder2.put( key, bigPrime.getValue(key) );			
-			}
-		}
+			// if(!containsKey(key))
+			// {
+				// //System.out.println("key22 : "+key+" : value : "+bigPrime.getValue(key));
+				// reminder2.put( key, bigPrime.getValue(key) );			
+			// }
+		// }
 		
-		BigDecimal reminder = reminder1.GetBigDecimal().subtract(reminder2.GetBigDecimal());
+		// BigDecimal reminder = reminder1.GetBigDecimal().subtract(reminder2.GetBigDecimal());
 		
-		BigPrimeFactor remnderFactor=new BigPrimeFactor(reminder);
+		// BigPrimeFactor remnderFactor=new BigPrimeFactor(reminder);
 		
-		return result.multiply(remnderFactor);
-	}
+		// return result.multiply(remnderFactor);
+	// }
 
 	
 	static NumarDenomPrime SimplifyNumarDenom(BigPrimeFactor numar, BigPrimeFactor denom)
 	{
 		NumarDenomPrime result = new NumarDenomPrime();
 		
-		Iterator<String> iterator = numar.getIterator();
+		Iterator<BigDecimal> iterator = numar.getIterator();
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(denom.containsKey(key))
-			{
-				BigDecimal value = new BigDecimal("0");
-				
-				if(numar.getValue(key).longValue() > denom.getValue(key).longValue())
+			{				
+				if(numar.getValue(key) > denom.getValue(key))
 				{
-					value = numar.getValue(key).subtract(denom.getValue(key));
+					int value = numar.getValue(key) - denom.getValue(key);
 					
 					result.numar.put( key, value );
 				}
 				else
 				{
-					value = denom.getValue(key).subtract(numar.getValue(key));
+					int value = denom.getValue(key) - numar.getValue(key);
 					
-					if(value.longValue() != 0)
+					if(value != 0)
 						result.denom.put( key, value );
 				}
 			}
@@ -307,7 +385,7 @@ class BigPrimeFactor
 	
 		while(iterator.hasNext())
 		{
-			String key = iterator.next();
+			BigDecimal key = iterator.next();
 			
 			if(!numar.containsKey(key))
 			{
@@ -319,19 +397,45 @@ class BigPrimeFactor
 		return result;
 	}
 	
+	
+	public static boolean isMultipleOf(final BigDecimal multiple, final BigDecimal base)
+	{
+		if (multiple.compareTo(base) == 0)
+			return true;
 
+		try
+		{
+			multiple.divide(base, 0, BigDecimal.ROUND_UNNECESSARY);
+			return true;
+		}
+		catch(ArithmeticException e)
+		{
+			return false;
+		}
+	}
+	
+	
 	BigDecimal GetBigDecimal()
 	{
-		BigDecimal result = new BigDecimal("1");
+		BigDecimal result = new BigDecimal(1);
 		
-		Iterator<String> keys = getIterator();
+		Iterator<BigDecimal> keys = getIterator();
 		
 		while(keys.hasNext())
 		{
-			String key = keys.next();
+			BigDecimal key = keys.next();
 			
-			BigDecimal val = new BigDecimal(key).pow( getValue(key).intValue() );
-			result = result.multiply( val );
+			if(key.scale() > 0)
+			{
+				
+				result = result.multiply( key.add( BigDecimal.TEN ) );
+			}
+			else
+			{
+				BigDecimal val = key.pow( getValue(key) );
+			
+				result = result.multiply( val );
+			}
 		}
 		
 		return result;
@@ -340,11 +444,11 @@ class BigPrimeFactor
 
 class PrimList implements Serializable
 {
-	static Vector<String> vec = null;
+	static Vector<BigDecimal> vec = null;
 	
-	static void Compose()
+	static
 	{
-		vec = new Vector<String>();
+		vec = new Vector<BigDecimal>();
 		int count = 0;
 		
 		try
@@ -376,7 +480,7 @@ class PrimList implements Serializable
 						{
 							//System.out.println(tokens[tokenIndex]);
 							
-							vec.add(tokens[tokenIndex]);
+							vec.add(new BigDecimal( tokens[tokenIndex] ));
 						}	
 						
 						count += tokens.length;
@@ -416,7 +520,6 @@ class NumarDenomPrime
 		this.numar = numarPrimeFactor;
 		this.denom = denomPrimeFactor;
 	}
-	
 	
 	// NumarDenomPrime(BigDecimal numarDecimal, BigDecimal denomDecimal)
 	// {

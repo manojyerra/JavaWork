@@ -6,6 +6,8 @@ public class PI
 	long totTimeToMultiply = 0;
 	long totTimeToDivide = 0;
 	
+	int sumPart = 0;
+	
 	
 	public static void main(String[] args)
 	{
@@ -253,7 +255,11 @@ public class PI
 		int increment 	= 20000;
 		int max 		= 1000000;
 		
-		BigDecimal result = new BigDecimal(0.0);		
+		BigDecimal totResult = new BigDecimal(0.0);
+		
+		sumPart++;
+		
+		BigDecimal result1 = new BigDecimal(0.0);
 		
 		BigDecimal sixTeenPowStartVal = new BigDecimal(1.0);
 		BigDecimal sixTeenPowIncrement = new BigDecimal(16).pow(increment);
@@ -262,7 +268,7 @@ public class PI
 		
 		for(int i=0; i<max; i+=increment)
 		{
-			result = result.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
+			result1 = result1.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
 			
 			long timeTaken = System.currentTimeMillis() - startTime;
 			
@@ -270,8 +276,73 @@ public class PI
 			
 			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
 		}
+		result1 = result1.multiply( new BigDecimal(4) );
 		
-		return result;
+		
+		
+		sumPart++;
+		
+		BigDecimal result2 = new BigDecimal(0.0);
+		
+		sixTeenPowStartVal = new BigDecimal(1.0);
+		sixTeenPowIncrement = new BigDecimal(16).pow(increment);
+		
+		for(int i=0; i<max; i+=increment)
+		{
+			result2 = result2.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
+			
+			long timeTaken = System.currentTimeMillis() - startTime;
+			
+			System.out.println("Iteration : "+(i+increment)+" time : "+timeTaken);
+			
+			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
+		}		
+		
+		result2 = result2.multiply( new BigDecimal(2) );
+		
+		
+		
+		sumPart++;
+		
+		BigDecimal result3 = new BigDecimal(0.0);
+		
+		sixTeenPowStartVal = new BigDecimal(1.0);
+		sixTeenPowIncrement = new BigDecimal(16).pow(increment);
+		
+		for(int i=0; i<max; i+=increment)
+		{
+			result3 = result3.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
+			
+			long timeTaken = System.currentTimeMillis() - startTime;
+			
+			System.out.println("Iteration : "+(i+increment)+" time : "+timeTaken);
+			
+			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
+		}		
+		
+		
+		
+		sumPart++;
+		
+		BigDecimal result4 = new BigDecimal(0.0);
+		
+		sixTeenPowStartVal = new BigDecimal(1.0);
+		sixTeenPowIncrement = new BigDecimal(16).pow(increment);
+		
+		for(int i=0; i<max; i+=increment)
+		{
+			result4 = result4.add( Spigot_Level_3(i, increment/5, 5, max, sixTeenPowStartVal) );
+			
+			long timeTaken = System.currentTimeMillis() - startTime;
+			
+			System.out.println("Iteration : "+(i+increment)+" time : "+timeTaken);
+			
+			sixTeenPowStartVal = sixTeenPowStartVal.multiply( sixTeenPowIncrement );
+		}		
+		
+		totResult = result1.subtract( result2.add( result3 ).add( result4 ) );
+		
+		return totResult;
 	}
 	
 		
@@ -386,26 +457,50 @@ public class PI
 	
 	NumarAndDenom Element(int k)
 	{
-		BigDecimal two = new BigDecimal(2.0);
-		BigDecimal four = new BigDecimal(4.0);
-		
-		BigDecimal a = new BigDecimal( 8 * k + 1 );
-		BigDecimal b = new BigDecimal( 8 * k + 4 );
-		BigDecimal c = new BigDecimal( 8 * k + 5 );
-		BigDecimal d = new BigDecimal( 8 * k + 6 );
-
-		BigDecimal const1 = four.multiply(b).multiply(c).multiply(d);
-		BigDecimal const2 = two.multiply(a).multiply(c).multiply(d);
-		BigDecimal const3 = a.multiply(b).multiply(d);
-		BigDecimal const4 = a.multiply(b).multiply(c);
-			
-		BigDecimal numar = const1.subtract( const2.add(const3.add(const4)));
-		BigDecimal denom = a.multiply(b).multiply(c).multiply(d);
-		
 		NumarAndDenom numerAndDenom = new NumarAndDenom();
 		
-		numerAndDenom.numar = numar;
-		numerAndDenom.denom = denom;	
+		if(sumPart == 1)
+		{
+			numerAndDenom.numar = new BigDecimal(1);
+			numerAndDenom.denom = new BigDecimal( 8 * k + 1 );
+		}
+		else if(sumPart == 2)
+		{
+			numerAndDenom.numar = new BigDecimal(1);
+			numerAndDenom.denom = new BigDecimal( 8 * k + 4 );
+		}
+		else if(sumPart == 3)
+		{
+			numerAndDenom.numar = new BigDecimal(1);
+			numerAndDenom.denom = new BigDecimal( 8 * k + 5 );
+		}
+		else if(sumPart == 4)
+		{
+			numerAndDenom.numar = new BigDecimal(1);
+			numerAndDenom.denom = new BigDecimal( 8 * k + 6 );
+		}
+		
+		
+		// BigDecimal two = new BigDecimal(2.0);
+		// BigDecimal four = new BigDecimal(4.0);
+		
+		// BigDecimal a = new BigDecimal( 8 * k + 1 );
+		// BigDecimal b = new BigDecimal( 8 * k + 4 );
+		// BigDecimal c = new BigDecimal( 8 * k + 5 );
+		// BigDecimal d = new BigDecimal( 8 * k + 6 );
+
+		// BigDecimal const1 = four.multiply(b).multiply(c).multiply(d);
+		// BigDecimal const2 = two.multiply(a).multiply(c).multiply(d);
+		// BigDecimal const3 = a.multiply(b).multiply(d);
+		// BigDecimal const4 = a.multiply(b).multiply(c);
+			
+		// BigDecimal numar = const1.subtract( const2.add(const3.add(const4)));
+		// BigDecimal denom = a.multiply(b).multiply(c).multiply(d);
+		
+		//NumarAndDenom numerAndDenom = new NumarAndDenom();
+		
+		// numerAndDenom.numar = numar;
+		// numerAndDenom.denom = denom;	
 		
 		return numerAndDenom;
 	}

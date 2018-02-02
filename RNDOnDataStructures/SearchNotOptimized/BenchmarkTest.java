@@ -29,7 +29,7 @@ class BenchmarkTest
 	
 		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
 		
-		int numOperations = 100000;
+		int numOperations = 1000000;
 		
 		for(int i=1; i<=numOperations; i++)
 		{
