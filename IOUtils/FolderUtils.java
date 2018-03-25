@@ -193,6 +193,10 @@ class FolderUtils
     	if(p != null)
     		p.destroyForcibly();
 
+		String OS = System.getProperty("os.name").toLowerCase();
+		
+		System.out.println("OSName : <"+OS+">");
+		
     	boolean isWindows = isWindows();
 
     	if(isWindows)
