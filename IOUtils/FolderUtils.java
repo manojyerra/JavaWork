@@ -205,11 +205,16 @@ class FolderUtils
 			Runtime rt = Runtime.getRuntime();
 			p = rt.exec("cmd.exe /c start "+command, null, new File("./"));
     	}
-    	else
+    	else if(isUnix())
     	{
 			//ProcessBuilder pb = new ProcessBuilder("/usr/bin/x-terminal-emulator", "--disable-factory", "-e", "java", className, folderPath);
 			ProcessBuilder pb = new ProcessBuilder("/usr/bin/xterm", "-e", "java", className, folderPath);
 			p = pb.start();
+		}
+		else if(isOSX())
+		{
+			ProcessBuilder pb = new ProcessBuilder("open", "java", className, folderPath);
+			p = pb.start();			
 		}
     }
 	
@@ -221,8 +226,14 @@ class FolderUtils
 
 	public static boolean isWindows() 
 	{
-		//return true;
 		String OS = System.getProperty("os.name").toLowerCase();
 		return (OS.indexOf("win") >= 0);
 	}
+	
+	public static boolean isOSX() 
+	{
+		String OS = System.getProperty("os.name").toLowerCase();
+		return (OS.indexOf("mac") >= 0 || OS.indexOf("os x") >= 0 || OS.indexOf("darwin") >= 0 );
+	}
+	
 }
