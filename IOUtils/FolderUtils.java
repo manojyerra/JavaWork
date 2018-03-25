@@ -193,7 +193,7 @@ class FolderUtils
     	if(p != null)
     		p.destroyForcibly();
 
-    	boolean isWindows = false;
+    	boolean isWindows = isWindows();
 
     	if(isWindows)
     	{
@@ -208,4 +208,17 @@ class FolderUtils
 			p = pb.start();
 		}
     }
+	
+	public static boolean isUnix() 
+	{
+		String OS = System.getProperty("os.name").toLowerCase();
+		return (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("aix") > 0 );
+	}
+
+	public static boolean isWindows() 
+	{
+		//return true;
+		String OS = System.getProperty("os.name").toLowerCase();
+		return (OS.indexOf("win") >= 0);
+	}
 }
