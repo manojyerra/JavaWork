@@ -19,8 +19,9 @@ class JDBCTest
 		{
 			//Driver and JDBC URL for postgres db
 			Class.forName("org.postgresql.Driver").newInstance();
-			conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
+			conn = DriverManager.getConnection("jdbc:postgresql://127.0.0.1:5432/postgres", "postgres", "postgres");
 
+			//Driver and JDBC URL for mssql db
 			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
 			//conn = DriverManager.getConnection("jdbc:sqlserver://10.224.212.18:1433;databaseName=head6024", "prpcuser", "prpcuser");
 
@@ -30,13 +31,13 @@ class JDBCTest
 			}
 
 			Statement stmt = conn.createStatement();
+			ResultSet rs = st.executeQuery(query);
 
       			//stmt.execute("create table Employeee123(id integer)");
-			
-			stmt.execute("INSERT INTO Employeee123 VALUES (123)");
+			//stmt.execute("INSERT INTO Employeee123 VALUES (123)");
 
 			if(stmt != null)
-			{
+			{	
 				stmt.close();
 			}
 
@@ -51,6 +52,9 @@ class JDBCTest
 		}		
 	}
 }
+
+
+
 
 
 
