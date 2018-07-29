@@ -1,2 +1,2 @@
-javac -cp mssql.jar: JDBCTest.java
+javac *.java utils/*.java
 java -cp mssql.jar: JDBCTest
