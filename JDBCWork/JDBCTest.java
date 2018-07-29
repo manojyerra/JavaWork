@@ -5,6 +5,10 @@ import java.sql.SQLException;
 import java.sql.Statement; 
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
+
+import utils.DBUtils;
 
 class JDBCTest
 {
@@ -32,37 +36,48 @@ class JDBCTest
 				System.out.println("Database Successfully connected");
 			}
 
-			
 			long startTime = System.currentTimeMillis();
 
-			ArrayList<String> tablesList = DBUtils.getTablesList(conn, false);
+			ArrayList<String> tablesList = DBUtils.getTablesList(conn, false, "data");
+
+			System.out.println("Number of tables : "+tablesList.size());
+
+/*
+			String tableName = "pr_sys_msg_qp_brokenitems";
+			Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = stmt.executeQuery("select * from "+tableName);
+
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("pr_sys_msg_qp_brokenitems.txt"));
+			DBUtils.writeResultSet(rs, oos);
+			oos.close();
+*/
 
 
 			for(int i=0; i<tablesList.size(); i++)
 			{
 				String tableName = tablesList.get(i);
-				System.out.println("tableName : "+tableName);			
-				Statement stmt = conn.createStatement();
+				Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = stmt.executeQuery("select * from "+tableName);
-				DBUtils.printTable(rs);
+
+				int rowsCount = DBUtils.getNumberOfRows(rs);
+
+				if(rowsCount > 0)
+				{
+					System.out.print("\ntableName : "+tableName+" ("+rowsCount+")");			
+				}
+
+				//DBUtils.printResultSet(rs, false);
+
+				ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("allTables/"+tableName+".table"));
+				DBUtils.writeResultSet(rs, oos);
+				oos.close();
+				
 				stmt.close();
 			}
 
-
 			long timeTaken = System.currentTimeMillis() - startTime;
 
-			System.out.println("Time taken : "+timeTaken+", number of tables : "+tablesList.size());
-
-			
-
-
-      			//stmt.execute("create table Employeee123(id integer)");
-			//stmt.execute("INSERT INTO Employeee123 VALUES (123)");
-
-			//if(stmt != null)
-			//{	
-			//	stmt.close();
-			//}
+			System.out.println("\nTime taken : "+timeTaken);
 
 			if(conn != null)
 			{
@@ -77,7 +92,10 @@ class JDBCTest
 }
 
 
+      			//stmt.execute("create table Employeee123(id integer)");
+			//stmt.execute("INSERT INTO Employeee123 VALUES (123)");
 
-
-
-
+			//if(stmt != null)
+			//{	
+			//	stmt.close();
+			//}
