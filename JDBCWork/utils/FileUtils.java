@@ -12,6 +12,11 @@ public class FileUtils
 {
 	public static ArrayList<String> getFileData(String filePath)
 	{
+		return FileUtils.getFileData(filePath, false, true);
+	}
+
+	public static ArrayList<String> getFileData(String filePath, boolean trim, boolean addEmptyLine)
+	{
 		ArrayList<String> rows = new ArrayList<String>();
 		
 		try
@@ -22,6 +27,16 @@ public class FileUtils
 		
 			while( (line = br.readLine()) != null )
 			{
+				if(trim)
+				{
+					line = line.trim();
+				}
+
+				if(!addEmptyLine && line.length() == 0)
+				{
+					continue;
+				}
+
 				rows.add(line);
 			}
 		}
