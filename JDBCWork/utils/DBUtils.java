@@ -17,16 +17,116 @@ import java.io.FileInputStream;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.Map;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 
 public class DBUtils
 {
+	//psql -d postgres -h localhost -U postgres < /home/manoj/all/work/backupfile.sql
+	// /usr/bin/pg_restore --host localhost --port 5432 --username "postgres" --dbname "postgres" --no-password  --schema data --verbose "/home/manoj/all/work/data.backup"
+
+	public static void dropSchema(Connection conn) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		stmt.execute("DROP SCHEMA data CASCADE");
+		stmt.close();
+	}
+
+	public static void createSchema(Connection conn) throws SQLException
+	{
+		Statement stmt = conn.createStatement();
+		stmt.execute("CREATE SCHEMA data");
+		stmt.close();
+	}
+
+	public static void restore(Connection conn) throws SQLException, IOException, InterruptedException 
+	{
+		DBUtils.dropSchema(conn);
+		DBUtils.createSchema(conn);
+
+	    ProcessBuilder pb = new ProcessBuilder(
+		"/usr/lib/postgresql/10/bin/pg_restore",
+		"--host", "localhost",
+		"--port", "5432",
+		"--username", "postgres",
+		"--dbname", "postgres",
+		"--schema", "data",
+		"--verbose",
+		"/home/manoj/all/work/other/JavaWork/JDBCWork/data.backup"
+		);
+
+		try
+		{
+			//pb.redirectErrorStream(true);
+			pb.environment().put("PGPASSWORD", "postgres");
+			Process p = pb.start();
+
+			BufferedReader r = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			String line = r.readLine();
+	
+			while (line != null) {
+				System.err.println(line);
+				line = r.readLine();
+			}
+
+			r.close();
+			p.waitFor();
+			System.out.println(p.exitValue());
+		}
+		catch (IOException | InterruptedException e) 
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+
+	public static void dump() throws IOException, InterruptedException 
+	{
+	    ProcessBuilder pb = new ProcessBuilder(
+		"/usr/lib/postgresql/10/bin/pg_dump",
+		"--host", "localhost",
+		"--port", "5432",
+		"--username", "postgres",
+		"--schema", "data",
+		"--format", "custom",
+		"--blobs",
+		"--verbose", "--file", 
+		"/home/manoj/all/work/other/JavaWork/JDBCWork/data.backup", 
+		"postgres");
+
+		try
+		{
+			//pb.redirectErrorStream(true);
+			pb.environment().put("PGPASSWORD", "postgres");
+			Process p = pb.start();
+
+			BufferedReader r = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+			String line = r.readLine();
+	
+			while (line != null) {
+				System.err.println(line);
+				line = r.readLine();
+			}
+
+			r.close();
+			p.waitFor();
+			System.out.println(p.exitValue());
+		}
+		catch (IOException | InterruptedException e) 
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+
 	public static void backup(String dirPath, Connection conn, String... schemas) throws SQLException, IOException
 	{
 		File dirPathFileObj = new File(dirPath);
 		dirPathFileObj.mkdirs();
 
-		ArrayList<String> tablesList = getTablesList(conn, false, schemas);
+		ArrayList<String> tablesList = getTablesList(conn, schemas);
 
 		String metaFilePath = dirPath+"/metadata.txt";
 		DBUtils.writeListToFile(tablesList, metaFilePath, false);
@@ -43,15 +143,27 @@ public class DBUtils
 	public static void restore(String dirPath, Connection conn, String... schemas) throws SQLException, IOException, ClassNotFoundException
 	{
 		ArrayList<String> tablesListFromFile = FileUtils.getFileData(dirPath+"/metadata.txt", true, false);
-		ArrayList<String> tablesList = getTablesList(conn, false, schemas);
+		ArrayList<String> tablesList = getTablesList(conn, schemas);
+
+		System.out.println("tablesListFromFile.size() : "+tablesListFromFile.size());
+		System.out.println("tablesList.size() : "+tablesList.size());
+
+		if(tablesListFromFile.size() != tablesList.size())
+		{
+			System.out.println("Number of tables are not matching.");
+			return;
+		}
+		
+		
 
 		for(int i=0; i<tablesListFromFile.size(); i++)
 		{
 			String tableName = tablesListFromFile.get(i);
 			System.out.println("TableName : "+tableName);
-			DBUtils.writeTableFromFile(conn, tableName, dirPath+"/"+tableName);			
+			DBUtils.writeTableFromFile(conn, tableName, dirPath+"/"+tableName);
 		}
 	}
+
 
 	public static void writeListToFile(ArrayList<String> list, String metaFilePath, boolean includeListSize) throws IOException
 	{
@@ -74,7 +186,7 @@ public class DBUtils
 	}
 
 
-	public static ArrayList<String> getTablesList(Connection conn, boolean printTables, String... schemaNames) throws SQLException
+	public static ArrayList<String> getTablesList(Connection conn, String... schemaNames) throws SQLException
 	{
 		DatabaseMetaData md = conn.getMetaData();
 		String[] types = {"TABLE"};
@@ -87,18 +199,6 @@ public class DBUtils
 			while (rs.next())
 			{
 				tablesList.add(rs.getString(3));
-			}
-
-			if(printTables)
-			{
-				System.out.println("\n\n   ***   Begin : Printing all table names   ***\n\n");
-
-				for(int num=0; num<tablesList.size(); num++)
-				{
-					System.out.println(tablesList.get(num));
-				}
-
-				System.out.println("\n\n   ***   End : Printing all table names   ***\n\n");
 			}
 		}
 
@@ -132,11 +232,6 @@ public class DBUtils
 		}
 
 		stmt.close();
-
-		//for(int i=0; i<colNamesList.size(); i++)
-		//{
-		//	System.out.println(colNamesList.get(i));
-		//}	
 
 		return colNamesList;
 	}
@@ -332,6 +427,7 @@ public class DBUtils
 		System.out.println("numCols:"+numCols);
 		
 		boolean run = true;
+
 		while(run)
 		{
 			//System.out.println("available bytes : "+ois.available());

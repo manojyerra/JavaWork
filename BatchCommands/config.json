@@ -1,0 +1,56 @@
+{
+
+	"runAllTasks" : false,
+
+	"tasks":
+	[
+		{
+			"run"      : false,
+			"taskName" : "git status",
+			"command"  : "git -C /home/manoj/all/work/master/prpc-platform status"
+		},
+		{
+			"run"      : false,
+			"taskName" : "git branch",
+			"command"  : "git -C /home/manoj/all/work/master/prpc-platform branch"
+		},
+		{
+			"run"      : false,
+			"taskName" : "gradle clean",
+
+			"batchCommands" :
+			[
+				"#!/bin/bash",
+				"cd /home/manoj/all/work/master/prpc-platform",
+				"./gradlew clean -x test"
+			]
+		},
+		{
+			"run"      : false,
+			"taskName" : "start database",
+			"command"  : "docker start manoj-database"
+		},
+		{
+			"run"      : false,
+			"taskName" : "backup of data schema",
+
+			"batchCommands" :
+			[
+				"#!/bin/bash",
+				"pg_dump --host=localhost --schema=data --username=postgres postgres > /home/manoj/all/work/master/prpc-platform/dataBackup.sql"
+			]
+		},
+		{
+			"run"      : true,
+			"taskName" : "restore of data schema",
+
+			"batchCommands" :
+			[
+				"#!/bin/bash",
+				"psql -d postgres -h localhost -U postgres < /home/manoj/all/work/master/prpc-platform/dataBackup.sql"
+			]
+		}
+
+
+	]
+}

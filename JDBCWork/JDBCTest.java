@@ -32,10 +32,12 @@ class JDBCTest
 			long startTime = System.currentTimeMillis();
 
 			//DBUtils.backup("backup", conn, "data");
-			DBUtils.restore("backup", conn, "data");
+			//DBUtils.restore("backup", conn, "data");
+
+			//DBUtils.dump();
+			DBUtils.restore(conn);
 
 			//DBUtils.getTableSchemaInfo(conn, "pr4_rule", "COLUMN_NAME", "DATA_TYPE");
-			
 
 			/*
 			DBUtils.deleteTable(conn, "data", "abc");
