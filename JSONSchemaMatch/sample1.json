@@ -1,0 +1,32 @@
+
+{
+"status":"200",
+"servedBy":"c9fab1fbffd221281c7277343519bf5e",
+
+
+"innerMap" :
+{
+    "key1":"value1",
+    "key2":"value2"
+},
+
+
+"array" : ["x", "y", "z"],
+
+
+"data":
+[
+    {"readyToProcess":0,"nodeType":"BackgroundProcessing","numOfBrokenMessages":0,"numOfScheduledMessages":0,"queueClass":"-","name":"pzStandardProcessor","state":"Running","processedInLastHour":"--"},
+    
+    {"readyToProcess":34678,"nodeType":"Search","numOfBrokenMessages":473319,"numOfScheduledMessages":1,"queueClass":"System-Queue-FTSIncrementalIndexer","name":"pyFTSIncrementalIndexer","state":"Running","processedInLastHour":"--"
+    },
+    
+    {
+    "readyToProcess":0,"nodeType":"BackgroundProcessing","numOfBrokenMessages":0,"numOfScheduledMessages":0,"queueClass":"System-Queue-                         Notification","name":"pyProcessNotification","state":"Running","processedInLastHour":"--"
+    }
+]
+
+}
+
+
+ 
