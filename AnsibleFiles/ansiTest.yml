@@ -1,0 +1,239 @@
+---
+
+- name: configuring web servers
+  hosts: test-servers
+  become: true
+  
+  vars:
+    username : xu
+    email : Manoj.Yerra@in.pega.com
+    #ansible_python_interpreter: /usr/bin/python3
+
+  
+  tasks:
+
+    #- name: GIT - add repo for git
+      #apt_repository: repo='ppa:git-core' state=present
+      #sudo: yes
+      
+    #- name: GIT - apt-get installing git
+      #apt: name=git state=latest update-cache=yes force=yes
+      #sudo: yes
+      
+      
+      
+    #- name: JAVA - add repo for java 8
+      #apt_repository: repo='ppa:webupd8team/java' state=present
+      
+    #- name: JAVA - set licence selected
+      #shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+      #sudo: yes
+
+    #- name: JAVA - set licence seen
+      #shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 seen true | /usr/bin/debconf-set-selections
+      #sudo: yes
+
+    #- name: JAVA - installing java 8
+      #apt: name=oracle-java8-installer state=latest update-cache=yes force=yes
+      #sudo: yes
+      
+      
+
+    #- name: GOOGLE CHROME - step 1
+      #command : wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - 
+      #ignore_errors: yes
+      
+    #- name : GOOGLE CHROME - step 2
+      #command : sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+      #ignore_errors: yes
+      
+    #- name: GOOGLE CHROME - installing google chrome
+      #apt: name=google-chrome-stable state=latest update-cache=yes force=yes
+
+      
+
+    #- name: DOCKER - installing apt-transport-https
+      #apt: name=apt-transport-https state=latest
+      
+    #- name: DOCKER - installing ca-certificates
+      #apt: name=ca-certificates state=latest
+      
+    #- name: DOCKER - installing curl
+      #apt: name=curl state=latest
+      
+    #- name: DOCKER - installing software-properties-common
+      #apt: name=software-properties-common state=latest
+
+    #- name: DOCKER - apt-key add
+      #command: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+      #ignore_errors: yes
+      
+    #- name: DOCKER - add-apt-repository
+      #apt_repository: repo='deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable' state=present
+    
+    #- name: DOCKER - installing docker-ce
+      #apt: name=docker-ce state=latest update-cache=yes force=yes
+      #ignore_errors: yes
+      
+    #- name: DOCKER - groupadd docker
+      #command: groupadd docker
+      #ignore_errors: yes
+      
+    #- name: DOCKER - gpasswd
+      #command: gpasswd -a $USER docker
+      #ignore_errors: yes
+
+
+      
+    #- name: PGADMIN3 - Installing pgadmin3
+      #apt: name=pgadmin3 state=present
+      
+      
+    #- name: ECLIPSE - Downloading eclipse neon
+      #get_url:
+          #url: http://ftp.yz.yamagata-u.ac.jp/pub/eclipse/technology/epp/downloads/release/neon/3/eclipse-java-neon-3-linux-gtk-x86_64.tar.gz
+          #dest: /home/xu/Desktop
+          #mode: 0777
+
+          
+  
+   #- name: coping file
+     #copy:
+         #src: prconfig.txt
+         #dest: '/home/{{ username }}/{{ username }}-prconfig.xml'
+         #mode: 0777
+         #backup: no
+      
+
+    #- name: Creates all directory
+      #file: path=/home/{{ username }}/all state=directory mode=0777
+      
+    #- name: Creates all/work directory
+      #file: path=/home/{{ username }}/all/work state=directory mode=0777
+
+    #- name: Creates all/installs director
+      #file: path=/home/{{ username }}/all/installs state=directory mode=0777
+
+    #- name: Creates all/softwares director
+      #file: path=/home/{{ username }}/all/softwares state=directory mode=0777
+      
+    #- name: Creates all/audios director
+      #file: path=/home/{{ username }}/all/audios state=directory mode=0777
+
+    #- name: Creates all/videos director
+      #file: path=/home/{{ username }}/all/videos state=directory mode=0777
+
+      
+    #- name: Creates all/work/master director
+      #file: path=/home/{{ username }}/all/work/master state=directory mode=0777
+
+    #- name: Creates all/work/other directory
+      #file: path=/home/{{ username }}/all/work/other state=directory mode=0777
+    
+            
+
+    #- name: Creates .ssh directory
+      #file: path=/home/{{ username }}/.ssh state=directory mode=0777
+            
+    #- name: Coping ssh private key ( id_rsa )
+      #copy:
+        #src: ./id_rsa
+        #dest: /home/{{ username }}/.ssh
+        #mode: 0700
+        
+    #- name: Coping ssh public key ( id_rsa.pub )
+      #copy:
+        #src: ./id_rsa.pub
+        #dest: /home/{{ username }}/.ssh
+        #mode: 0777
+
+        
+    #- name: Creating vagrant-ubuntu-desktop directory
+      #file: path=/home/{{ username }}/all/work/master/vagrant-ubuntu-desktop state=directory mode=0777
+      
+    #- name: Clone vagrant-ubuntu-desktop git repo.
+      #git:
+        #repo: ssh://git@hydgitmirror.pega.com:7999/git/squid/vagrant-ubuntu-desktop.git
+        #version: master
+        #dest: /home/{{ username }}/all/work/master/vagrant-ubuntu-desktop
+        #accept_hostkey: yes
+        #key_file: /home/{{ username }}/.ssh/id_rsa
+        
+
+    #- name: Creating prpc-platform directory
+      #file: path=/home/{{ username }}/all/work/master/prpc-platform state=directory mode=0777
+      #ignore_errors: yes
+      
+    #- name: Cloning prpc-platform git repo.
+      #git:
+        #repo: ssh://git@hydgitmirror.pega.com:7999/git/prpc/prpc-platform.git
+        #version: master
+        #dest: /home/{{ username }}/all/work/master/prpc-platform
+        #accept_hostkey: yes
+        #key_file: /home/{{ username }}/.ssh/id_rsa
+
+        
+    - name: gradle clean
+      command: ./gradlew clean
+      args:
+          chdir: /home/{{ username }}/all/work/master/prpc-platform
+        
+      
+      
+#sudo apt install apt-transport-https ca-certificates curl software-properties-common
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+#sudo apt update
+#sudo apt install docker-ce
+#sudo groupadd docker
+#sudo gpasswd -a $USER docker
+
+      
+      
+#- name: Schedule a command to execute in 1 minutes as root.
+    #at:
+    #command: /usr/bin/docker logs -f suspicious_lumiere >> /var/log/docker-logs-output 2>&1
+    #count: 1
+    #units: minutes
+    #unique : true
+
+
+    #at: command="docker logs -f suspicious_lumiere"
+    #command : 'sudo apt install kwrite'
+    #command : 'docker logs suspicious_lumiere >> /home/xu/temp.txt'
+    
+      
+      
+# state values can be 'absent', 'build-dep', 'installed', 'latest', 'present', 'removed'
+# hosts value can be either group name or ip
+
+
+  
+#- name: configuring db servers
+  #hosts: test-servers
+  #become: true
+
+  #tasks:
+    #- name: install kwrite
+      #command: 'sudo apt install kwrite'
+
+    #- name: download file
+      #get_url:
+          #url: https://dl.boxcloud.com/d/1/b1!c_w5ELaqYa7MJmDfWVP1SawSBlsqK4QzadV-MATRuu83N1_YYlso4QpMPOjU6_SO_KsmiOP4PQFhHvLzsmmA9wK8bi6yIlDs_R2TV4vkg9aiW9J5L6HcrZEzv0kqB3DOq3tJTc1fNp8keL6BEJroG4KzoEUDGiQN3ut7kM8mw83fCGwhe7eWecXgxahXWyWjv8-xBwMrRSgDg-BY-4nGob8CIRQsbH2GDt0BhqbXyGwBKtCGBpYEPH5E3FrMex6d23_rzl3qnfvIb4LPGKBVMRA6gEa65ZoSJ3zo6fm7dca3WrtVJDp4WbfhCca3rIeV7LAoOUQLAXafh5rB95WmeI46W9e5VqR-foS-dU5mfBGuVobxv3zvcryGsrhEOiD25V_J8LGwATc9Z0FhdqtrjpwXQ5NPSiSDhvMPV2uMTYqYGRXyqUNSIEinJsYD3LIox0GBLd1GoWsVRn3_sdm3dwItLUkVV2EX79ylQlAWyzYkJpJ9pplIpJbYntrX_WxH5NvN_nJXnGLkiBkSJ-GjKA_uJR7MZSk6gqaNvl4EO8NSrrlLD3uN9rLUsuRxd51_Eo5iPwffoqzQvfu3CKm2jrN0hMIQVEGO5l7oBJpmXr4-QSUeyTzDkhhXq9jYMrDp2z7gouptzHIl3rA-uJa8D6-UGA8VHlV9WNF24l127FWGTcBGRh_ots0J2zpEr9CHnVbaV1RhRU78IwCajR6U63cTFbwV_rIMyoxRt7ym1Qa5oTnfS1-CA6JdbbYr9BQfdv99sqxTc7iYCFP0V8-JrTFVCUGpEXeNXB9_BYlDxXfX3SalhYgMH7lBo5gQdU0PHE_VVAoJv0J-1Y0rPAG6WuLg_TciIsEcft1RThHz4L9alXvXU-ZRKlBEyAlvGFb9zols-2802EJfIeCwd1HMqAKV4yCLjJRRTFhjvza_DkqtvQy4yCZ9RjnFNRHq--Wgxpay9IVgNthFQBICuL2Fs2588hyx3HCmfLsN68w-JpJDuGnk3vmUi7QL0_5wwswY3elCKL052UwFc-NjsSmKEI-LReCh3XT1WSUilDlnu5qHDCk1JIo5CmyaKftmU-3FLUwjkzL7SEsvi1yw-ysojarZXG74-LtVlEU10Ke7mPD06CRFqFlK5R7cCzrWG4VK78ypqBq7-jsWFy91uYlErrybGIpj75UAkUUlv3hJ0oC1l_Lgas5fGw56U2lErtV5L-nqx7zsE2KdbnrOKoTxWhR0QnCvkaZrb-bZxVjkBLxi2PLXhKekqSM-zBHHN8Wf2-cRxJG4zVLldEoW4lQxwCHFkTrush6Pxz896MCs9tDD7ybgiCEzHDoKJl_1qGA5dR68U0KHRERylM82xFR-EJlyOagv9vxRc4VGcfl4la4XK9F5WUVgnI9qqq2wNGEZ2IL3b0MnLvJj8JBfF2Ct2Wucmkv1mFHT2KxOEIW_/download
+          #dest: /home/xu/Desktop
+          #mode: 0777
+
+          
+          
+          
+#keyInt : 10
+#keyFloat : "15.2"
+#key3 : 
+  #key : val
+  #key2 : val2
+  #key3 :
+    #- val
+    #- val2
+    #- val3 : 
+        #key : value
+
