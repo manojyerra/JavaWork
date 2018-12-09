@@ -1,0 +1,3 @@
+Open Run program and type "shell:startup"
+Copy "RunWorkTimeCalc.cmd - Shortcut" from current folder to startup folder
+ 
