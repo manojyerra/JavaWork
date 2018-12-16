@@ -11,45 +11,18 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 
 
-class BatchCommands
+class JSONSchemaMatch
 {
 
 	public static void main(String args[]) throws Exception
 	{
-		new BatchCommands();
+		new JSONSchemaMatch();
 	}
 
-	BatchCommands() throws Exception
+	JSONSchemaMatch() throws Exception
 	{
 		JSONObject jsonObj1 = new JSONObject(FileUtils.getFileDataAsStr("sample1.json"));
 		JSONObject jsonObj2 = new JSONObject(FileUtils.getFileDataAsStr("sample2.json"));
-		
-		
-		//System.out.println("\n\nJSONObj:"+jsonObj);
-		//runAll = jsonObj.getBoolean("runAllTasks");
-		//JSONArray taskArr = (JSONArray)jsonObj.get("tasks");
-		
-		
-		//if(taskMap.has("command"))
-		//{
-		//	taskMap.getString("command"));
-		//}
-		//else if(taskMap.has("batchCommands"))
-		//{
-		//	executeBatchCommands(taskMap.getJSONArray("batchCommands"));
-		//}
-		
-		//System.out.println("JSON1 "+jsonObj1);
-		
-		/*
-		Integer obj = new Integer(10);
-		Integer fl = new Integer(22);
-		
-		if( obj.getClass().equals(fl.getClass()) )
-		{
-            System.out.println("aaa");
-		}
-		*/
 		
 		boolean matching = isSchemaMatching(jsonObj1, jsonObj2);
 		System.out.println("match : "+matching);
