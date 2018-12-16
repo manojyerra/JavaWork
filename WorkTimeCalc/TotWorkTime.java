@@ -8,13 +8,82 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
+import java.util.Comparator;
 
 
 class TotWorkTime
 {
 	public static void main(String args[]) throws IOException
 	{
-		new TotWorkTime(args[0]);
+		File[] allFiles = (new File("data")).listFiles();
+		ArrayList<String> fileNamesArr = new ArrayList<String>();
+		
+		for(int i=0; i<allFiles.length; i++)
+		{
+			fileNamesArr.add(allFiles[i].getAbsolutePath());
+		}
+				
+		sortList(fileNamesArr);
+	
+		for(int i=0; i<fileNamesArr.size(); i++)
+		{
+			new TotWorkTime(fileNamesArr.get(i));
+		}
+	}
+	
+	private static void sortList(ArrayList<String> arrayList)
+	{
+		Collections.sort(arrayList, new Comparator<String>() {
+			@Override
+			public int compare(String str2, String str1) 
+			{				
+				//C:\all\work\JavaWork\WorkTimeCalc\data\bg_2018_11_18.txt
+				//C:\all\work\JavaWork\WorkTimeCalc\data\bg_2018_11_19.txt
+
+				String dateStr1 = str1.substring(str1.indexOf("bg_")+3, str1.lastIndexOf(".txt"));
+				String[] date1 = dateStr1.split("_");
+				
+				String dateStr2 = str2.substring(str2.indexOf("bg_")+3, str2.lastIndexOf(".txt"));
+				String[] date2 = dateStr2.split("_");
+				
+				String ymd1 = date1[0];
+				String ymd2 = date2[0];
+				
+				if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+				{
+					if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+					if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+					{
+
+						ymd1 = date1[1];
+						ymd2 = date2[1];
+						if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+						{
+							if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+							if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+							{
+								
+								ymd1 = date1[2];
+								ymd2 = date2[2];
+								if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+								{
+									if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+									if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+									{
+										return 0;
+									}
+								}									
+								
+							}
+						}
+						
+					}
+				}
+				
+				return -1;
+			}
+		});		
 	}
 	
 	TotWorkTime(String filePath) throws IOException
