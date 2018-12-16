@@ -1,0 +1,1 @@
+jar cfm ImageViewer.jar Manifest.txt ImageDiffViewer.class ImageCanvas.class TGALoader.class
