@@ -1,0 +1,63 @@
+ka - 6
+kha - 29
+ga - 52
+gha = 73
+gna = 96
+ch = 118
+cha = 144
+ja = 171
+jha = 196
+ina = 222
+ta = 249
+tta = 274
+da = 304
+dda = 327
+ana = 354
+tha = 382
+ttha = 409
+dha = 437
+ddha = 464
+na = 492
+pa = 519
+pha = 547
+ba = 574
+bha = 602
+ma = 629
+ya = 659
+ra = 684
+rra = 709
+la = 735
+ala = 764
+va = 790
+sha = 819
+kalu-sha = 846
+sa = 874
+ha = 896
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

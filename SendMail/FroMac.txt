@@ -1,0 +1,2 @@
+for mac set class path as below.
+export CLASSPATH=/Users/rahulkumar/Desktop/SendMail/mail.jar:/Users/rahulkumar/Desktop/SendMail/activation.jar:

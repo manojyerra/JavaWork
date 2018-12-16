@@ -1,0 +1,13 @@
+div.row { clear: both; float: none; width: 960px; overflow: hidden; border-top: 1px solid #e0e0e0; padding: 0; white-space: nowrap; margin: auto; }
+div.u { float: left; text-align: center; width: 60px; padding: 8px 0px 4px 0px; }
+div.u tt { font-size: 9pt; display: block; color: #404040; text-transform: uppercase; }
+div.u span { font-size: 20pt; height: 44px; display: block; font-family: arial, helvetica, sans-serif; }
+
+table.unicode { font-size: 9pt; border-collapse: collapse; margin-top: 10px; }
+table.unicode td { vertical-align: middle; padding: 1px 0px 1px 0px; }
+table.unicode td.space { padding: 1px 60px 1px 60px; }
+
+div.utop form { padding-top: 12px; float: right; }
+div.utop h1 { padding: 6px 0px 6px 0px; }
+div.ubottom { border-top: 1px solid #e0e0e0; }
+div.ubottom form { padding-top: 7px; float: right; }

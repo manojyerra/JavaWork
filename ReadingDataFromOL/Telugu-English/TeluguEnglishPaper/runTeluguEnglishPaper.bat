@@ -1,0 +1,4 @@
+javac TeluguEnglishPaper.java
+pause
+java TeluguEnglishPaper
+pause
