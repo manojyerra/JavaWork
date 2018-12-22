@@ -27,7 +27,7 @@ class JDBCTest
 	{
 		try
 		{
-			conn = connectToDatabase("postgres");
+			conn = connectToDatabase("mssql");
 
 			long startTime = System.currentTimeMillis();
 
@@ -35,7 +35,7 @@ class JDBCTest
 			//DBUtils.restore("backup", conn, "data");
 
 			//DBUtils.dump();
-			DBUtils.restore(conn);
+			//DBUtils.restore(conn);
 
 			//DBUtils.getTableSchemaInfo(conn, "pr4_rule", "COLUMN_NAME", "DATA_TYPE");
 
@@ -111,7 +111,7 @@ class JDBCTest
 		{
 			//Driver and JDBC URL for mssql db 
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
-			conn = DriverManager.getConnection("jdbc:sqlserver://10.224.212.18:1433;databaseName=head6024", "prpcuser", "prpcuser");
+			conn = DriverManager.getConnection("jdbc:sqlserver://10.225.70.235:1433;databaseName=ml9;SelectMethod=cursor;SendStringParametersAsUnicode=false", "prpcuser", "prpcuser");
 		}
 
 		if(conn!=null)
