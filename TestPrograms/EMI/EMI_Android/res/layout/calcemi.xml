@@ -1,0 +1,309 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/ReLayout1"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#ffffff"
+	android:orientation="vertical"
+	tools:context=".EntryPoint"
+	android:weightSum="1"
+	android:paddingTop="0dp">
+
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/scrollView"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:fillViewport="false"
+		android:layout_marginTop="20dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:weightSum="1"
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="Princpal Amount"
+				android:id="@+id/princpalAmount"
+				android:layout_alignParentTop="true"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:layout_marginBottom="10dp"
+				android:textColor="#009688"
+				android:layout_marginLeft="16dp" />
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="number"
+				android:ems="10"
+				android:id="@+id/loanAmountEditText"
+				android:layout_below="@+id/resultTextView"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentEnd="true"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="Interest"
+				android:id="@+id/interestTextView"
+				android:layout_below="@+id/editText"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:layout_marginTop="20dp"
+				android:layout_marginBottom="10dp"
+				android:textColor="#009688"
+				android:layout_marginLeft="16dp" />
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="number|numberDecimal"
+				android:ems="10"
+				android:id="@+id/interestEditTxt"
+				android:layout_below="@+id/interestTextView"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentStart="true"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentEnd="true"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="Loan Tenure"
+				android:id="@+id/loanTenureTextView"
+				android:textColor="#009688"
+				android:layout_below="@+id/interestEditTxt"
+				android:layout_alignLeft="@+id/interestEditTxt"
+				android:layout_alignStart="@+id/interestEditTxt"
+				android:layout_marginTop="20dp"
+				android:layout_marginLeft="16dp"
+				android:layout_marginBottom="10dp" />
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="54dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp">
+
+				<EditText
+					android:layout_height="wrap_content"
+					android:id="@+id/loanTenureEditText"
+					android:layout_weight="0.02"
+					android:layout_toStartOf="@+id/yearOrMonthSpinner"
+					android:layout_toLeftOf="@+id/yearOrMonthSpinner"
+					android:layout_alignParentStart="true"
+					android:layout_alignParentLeft = "true"
+					android:inputType="number"
+					android:layout_width="match_parent" />
+
+				<Spinner
+					android:layout_width="129dp"
+					android:layout_height="wrap_content"
+					android:id="@+id/yearOrMonthSpinner"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentEnd="true"
+					android:layout_alignBottom="@+id/loanTenureEditText"
+					android:layout_marginBottom="2dp" />
+
+			</RelativeLayout>
+
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="54dp"
+				android:layout_marginTop="30dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp">
+
+
+				<Button
+					android:layout_width="167dp"
+					android:layout_height="match_parent"
+					android:text="Calculate EMI"
+					android:id="@+id/calEMIBtn"
+					android:layout_weight="0.30"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#ffffff"
+					android:backgroundTint="#009688"
+					android:textSize="20dp" />
+
+				<Button
+					android:layout_width="167dp"
+					android:layout_height="match_parent"
+					android:text="Clear"
+					android:id="@+id/clearBtn"
+					android:layout_weight="0.30"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#ffffff"
+					android:backgroundTint="#009688"
+					android:textSize="20dp"
+					android:layout_alignParentTop="true"
+					android:layout_alignParentRight="true"
+					android:layout_alignParentEnd="true" />
+
+			</RelativeLayout>
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="30dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="10dp">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="Loan EMI"
+				android:id="@+id/loanEMITitle"
+				android:layout_gravity="center_horizontal"
+				android:textColor="#000000"
+				android:layout_centerVertical="true"
+				android:layout_centerHorizontal="true" />
+
+			</RelativeLayout>
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="20dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:id="@+id/emiValue"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#000000"
+					android:layout_centerVertical="true"
+					android:layout_centerHorizontal="true" />
+
+			</RelativeLayout>
+
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="25dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="10dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:text="Total Interest Payable"
+					android:id="@+id/interestTitle"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#000000"
+					android:layout_centerVertical="true"
+					android:layout_centerHorizontal="true" />
+
+			</RelativeLayout>
+
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="0dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="20dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:id="@+id/interestValue"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#000000"
+					android:layout_centerVertical="true"
+					android:layout_centerHorizontal="true" />
+
+			</RelativeLayout>
+
+
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="25dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="10dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:text="Total Payment"
+					android:id="@+id/totalPaymentTitle"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#000000"
+					android:layout_alignParentTop="true"
+					android:layout_centerHorizontal="true" />
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:text="(Principal + Interest)"
+					android:id="@+id/totalPaymentTitle2"
+					android:textColor="#000000"
+					android:layout_below="@+id/totalPaymentTitle"
+					android:layout_centerHorizontal="true"
+					android:layout_marginTop="5dp" />
+
+			</RelativeLayout>
+
+
+
+
+			<RelativeLayout
+
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="0dp"
+				android:layout_marginLeft="15dp"
+				android:layout_marginRight="15dp"
+				android:layout_marginBottom="30dp">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:id="@+id/totalPaymentValue"
+					android:layout_gravity="center_horizontal"
+					android:textColor="#000000"
+					android:layout_centerVertical="true"
+					android:layout_centerHorizontal="true" />
+
+			</RelativeLayout>
+
+		</LinearLayout>
+	</ScrollView>
+
+</RelativeLayout>
