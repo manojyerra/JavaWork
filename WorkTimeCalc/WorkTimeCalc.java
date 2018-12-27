@@ -8,32 +8,24 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
-
+import java.awt.Frame;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 class WorkTimeCalc
 {
 	Robot robo = new Robot();
-	
-	public static void main(String args[]) throws AWTException, IOException
-	{
-	
+	Frame frame = new Frame();
+
 // 	NO_PROCESS=$(echo ps -aef | grep RunWorkTimeCalc | wc -l)
 // 
 // 	if [ $NO_PROCESS -le 0 ]; then
 // 		sh "/home/manoj/all/work/other/JavaWork/WorkTimeCalc/RunWorkTimeCalc.sh" &>/dev/null & 
 // 	fi
-
-
-		if(args.length > 0)
-		{
-			System.out.println("WorkTimeCalc started with "+args[0]);
-			new WorkTimeCalc(args[0]);
-		}
-		else
-		{
-			System.out.println("WorkTimeCalc started with default");
-			new WorkTimeCalc("defalut");
-		}
+	
+	public static void main(String args[]) throws AWTException, IOException
+	{
+		new WorkTimeCalc("bg");
 	}
 	
 	WorkTimeCalc(String filePreFix) throws AWTException, IOException
@@ -45,6 +37,14 @@ class WorkTimeCalc
 		long sleepTimeInMin = 2;
 		
 		Point prevPos = MouseInfo.getPointerInfo().getLocation();
+		
+		frame.setTitle("0:0");
+		frame.setLayout(null);
+		frame.setBounds(500,300,300,50);
+		frame.setVisible(true);
+		frame.setAlwaysOnTop(true);
+		
+		updateTimeOnFrameFirstTime(data.getPath(), "bg", System.currentTimeMillis());
 		
 		while(true)
 		{
@@ -85,6 +85,8 @@ class WorkTimeCalc
 		
 		String fileName = folderPath+"/"+filePreFix+"_"+currDate.getYear()+"_"+currDate.getMonth()+"_"+currDate.getDate()+".txt";
 
+		frame.setTitle(formatMinutes(calcTime(fileName)));
+		
 		BufferedWriter bw = new BufferedWriter(new FileWriter(fileName, true));
 		
 		String text = currentTimeMillis+" "+continuesTime+" "+mousePos+" "+currDate;
@@ -97,6 +99,57 @@ class WorkTimeCalc
 		
 		bw.close();
 	}
+
+	void updateTimeOnFrameFirstTime(String folderPath, String filePreFix, long currTime) throws IOException
+	{
+		TimestampToDate currDate = new TimestampToDate(currTime);
+		
+		String fileName = folderPath+"/"+filePreFix+"_"+currDate.getYear()+"_"+currDate.getMonth()+"_"+currDate.getDate()+".txt";
+		
+		File fileObj = new File(fileName);
+		
+		if(fileObj.exists())
+		{
+			frame.setTitle(formatMinutes(calcTime(fileName)));
+		}
+	}
+	
+	int calcTime(String filePath) throws IOException
+	{
+		BufferedReader br = new BufferedReader(new FileReader(filePath));
+		
+		String line = "";
+		int totTime = 0;
+		int prevTime = 0;
+		int time = 0;
+		
+		while( (line = br.readLine()) != null)
+		{
+			String tokens[] = line.split(" ");
+			time = Integer.parseInt(tokens[1]);
+			
+			if(time < prevTime)
+			{
+				totTime += prevTime;
+			}
+			
+			prevTime = time;
+		}
+		
+		totTime += time;
+		
+		br.close();
+		
+		return totTime;
+	}
+	
+	String formatMinutes(int timeInMinutes)
+	{
+		int hours = timeInMinutes / 60;
+		int mins = timeInMinutes - hours * 60;
+		
+		return hours+":"+mins;
+	}	
 }
 
 

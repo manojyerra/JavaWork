@@ -8,24 +8,19 @@ import java.io.IOException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 
 class TotWorkTime
 {
 	public static void main(String args[]) throws IOException
 	{
-		File[] allFiles = (new File("data")).listFiles();
-		
-		for(int i=0; i<allFiles.length; i++)
-		{
-			new TotWorkTime(allFiles[i].getAbsolutePath());
-			//new TotWorkTime(args[0]);
-		}
+		new TotWorkTime(args[0]);
 	}
 	
-	TotWorkTime(String filePath) throws IOException
+	TotWorkTime(String basePath) throws IOException
 	{
-		File file = new File(filePath);
+		File file = new File(basePath);
 		ArrayList<String> list = new ArrayList<String>();
 		
 		if(file.isDirectory())
@@ -38,13 +33,18 @@ class TotWorkTime
 				
 				if(dayFile.startsWith("bg_"))
 				{
-					int totTime = calcTime(listOfFile[i].getPath());
-					String printStr = "Total time on "+dateByFilePath(dayFile)+" : "+formatMinutes(totTime);
+					String filePath = listOfFile[i].getPath();
+					
+					int totTime = calcTime(filePath);
+					String dayShortName = getDayShortName(filePath);
+					String printStr = "Total time on "+dateByFilePath(filePath)+" ["+dayShortName+"] : "+formatMinutes(totTime);
+					
+					//System.out.println(printStr);
 					list.add(printStr);
 				}
 			}
 			
-			Collections.sort(list);
+			sortList(list);
 			
 			for(int i=0; i<list.size(); i++)
 			{
@@ -53,13 +53,71 @@ class TotWorkTime
 		}
 		else
 		{
-			int totTime = calcTime(filePath);
-			String dayShortName = getDayShortName(filePath);
+			int totTime = calcTime(basePath);
+			String dayShortName = getDayShortName(basePath);
 			
-			System.out.println("Total time on "+dateByFilePath(filePath)+" ["+dayShortName+"] : "+formatMinutes(totTime));
+			System.out.println("Total time on "+dateByFilePath(basePath)+" ["+dayShortName+"] : "+formatMinutes(totTime));
 		}
 	}
 	
+	private static void sortList(ArrayList<String> arrayList)
+	{
+		Collections.sort(arrayList, new Comparator<String>() {
+			@Override
+			public int compare(String str2, String str1) 
+			{				
+				//Total time on 2018_12_2 [SUN] : 2 hrs 12 minutes
+				
+				//C:\all\work\JavaWork\WorkTimeCalc\data\bg_2018_11_18.txt
+				//C:\all\work\JavaWork\WorkTimeCalc\data\bg_2018_11_19.txt
+
+				String preStr = "Total time on ";
+				String postStr = " [";
+				
+				String dateStr1 = str1.substring(str1.indexOf(preStr)+preStr.length(), str1.lastIndexOf(postStr));
+				String[] date1 = dateStr1.split("_");
+				
+				String dateStr2 = str2.substring(str2.indexOf(preStr)+preStr.length(), str2.lastIndexOf(postStr));
+				String[] date2 = dateStr2.split("_");
+				
+				String ymd1 = date1[0];
+				String ymd2 = date2[0];
+				
+				if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+				{
+					if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+					if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+					{
+
+						ymd1 = date1[1];
+						ymd2 = date2[1];
+						if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+						{
+							if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+							if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+							{
+								
+								ymd1 = date1[2];
+								ymd2 = date2[2];
+								if(Integer.parseInt(ymd1) >= Integer.parseInt(ymd2))
+								{
+									if(Integer.parseInt(ymd1) > Integer.parseInt(ymd2))return 1;
+									if(Integer.parseInt(ymd1) == Integer.parseInt(ymd2))
+									{
+										return 0;
+									}
+								}									
+								
+							}
+						}
+						
+					}
+				}
+				
+				return -1;
+			}
+		});
+	}
 	
 	int calcTime(String filePath) throws IOException
 	{
@@ -84,6 +142,8 @@ class TotWorkTime
 		}
 		
 		totTime += time;
+		
+		br.close();
 		
 		return totTime;
 	}
