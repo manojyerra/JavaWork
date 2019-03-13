@@ -45,8 +45,7 @@ class UIBuilder
 		ref.setLocation((monitorW-visibleW)/2, (monitorH-visibleH)/2);
 		
 		ref.setLayout(null);
-		ref.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		 
-		//ref.setTitle("Practie telugu to english conversion");
+		ref.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ref.getContentPane().setBackground(Color.GRAY);
 
 		createTextRel(0, 0, sw, sh-50, ref.getContentPane());
@@ -83,18 +82,27 @@ class UIBuilder
 		
 		ref.goToPageStart = new JButton("Page Start");
 		ref.goToPageEnd   = new JButton("Page End");
-		ref.nextPage  = new JButton("Next Page");
+		ref.goToLine = new JButton("Go to line");
+		ref.goToUnansweredLine = new JButton("Go To Unanswered Line");
 		ref.prevPage  = new JButton("Prev Page");
+		ref.nextPage  = new JButton("Next Page");
+		ref.goToPage  = new JButton("Go To Page");
 		
-		ref.goToPageStart.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
-		ref.goToPageEnd.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
-		ref.nextPage.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
-		ref.prevPage.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
+		ref.goToPageStart.setBounds(x, y, btnW, btnH); 		x = x+btnW+gapBtw;
+		ref.goToPageEnd.setBounds(x, y, btnW, btnH); 		x = x+btnW+gapBtw;
+		ref.goToLine.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;
+		ref.goToUnansweredLine.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
+		ref.prevPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;
+		ref.nextPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;
+		ref.goToPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;		
 		
 		contentPane.add(ref.goToPageStart);
 		contentPane.add(ref.goToPageEnd);
-		contentPane.add(ref.nextPage);
+		contentPane.add(ref.goToLine);
+		contentPane.add(ref.goToUnansweredLine);
 		contentPane.add(ref.prevPage);
+		contentPane.add(ref.nextPage);
+		contentPane.add(ref.goToPage);		
 	}
 	
 	JLabel createLabel(int x, int y, int w, int h)

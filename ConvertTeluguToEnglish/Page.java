@@ -42,14 +42,27 @@ class Page
 		return sentence;
 	}
 	
-	void goToStart()
+	Sentence sentenceByIndex(int index)
 	{
-		arrIndex = -1;
+		if(index >= 0 && index < teluguArr.size())
+		{
+			arrIndex = index-1;
+			return nextSentence();
+		}
+		
+		return null;
 	}
 	
-	void goToEnd()
+	Sentence firstSentence()
 	{
-		arrIndex = teluguArr.size();
+		arrIndex = -1;
+		return nextSentence();
+	}
+	
+	Sentence lastSentence()
+	{
+		arrIndex = teluguArr.size()-2;
+		return nextSentence();
 	}
 
 	boolean hasNextSentence()
@@ -83,6 +96,17 @@ class Page
 	void setConversion(String text)
 	{
 		convertionArr.set(arrIndex, text);
+	}
+	
+	int unAnsweredIndex()
+	{
+		for(int i=0; i<convertionArr.size(); i++)
+		{
+			if(convertionArr.get(i).trim().length() == 0)
+				return i;
+		}
+		
+		return -1;
 	}
 	
 	void saveConversion()

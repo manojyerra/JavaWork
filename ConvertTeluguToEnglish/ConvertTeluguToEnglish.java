@@ -29,8 +29,11 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	
 	JButton goToPageStart = null;
 	JButton goToPageEnd = null;
+	JButton goToLine = null;
+	JButton goToUnansweredLine = null;
 	JButton nextPage = null;
 	JButton prevPage = null;
+	JButton goToPage = null;
 	
 	Page page = null;
 	ConfigReader config = null;
@@ -56,21 +59,156 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 		onShiftAndEnter(writeTextArea);
 		onJFrameClose(this);
 		onGoToPageStart(goToPageStart);
-		onGoToPageEnd(goToPageEnd);		
+		onGoToPageEnd(goToPageEnd);
+		onGoToLine(goToLine);
+		onGoToUnansweredLine(goToUnansweredLine);
+		onNextPage(nextPage);
+		onPrevPage(prevPage);
+		onGoToPage(goToPage);
 		setVisible(true);
 		
 		updateTitle();
+	}
+	
+	void onGoToPage(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				String str = JOptionPane.showInputDialog("Enter page number");
+				int pageNumber = -1;
+				
+				if(str != null)
+				{
+					try
+					{
+						pageNumber = Integer.parseInt(str);
+					}
+					catch(Exception exc)
+					{
+						JOptionPane.showMessageDialog( null, "Invalid page number");
+						return;
+					}
+					
+					onPageChange(pageNumber, "Page not exist.");
+				}
+			}
+		});		
+	}
+	
+	void onNextPage(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				String errorMsg = "Next page of this page is not exist.";
+				onPageChange(config.currentPage.pageNumber+1, errorMsg);
+			}
+		});
+	}
+	
+	void onPrevPage(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				String errorMsg = "Previous page of this page is not exist.";
+				onPageChange(config.currentPage.pageNumber-1, errorMsg);
+			}
+		});		
+	}
+	
+	void onPageChange(int pageNum, String errorMsg)
+	{
+		try
+		{
+			File file = new File("Pages/"+pageNum);
+			
+			if(file.exists())
+			{
+				config.currentPage.pageNumber = pageNum;
+				config.currentPage.lineNumber = 1;
+				
+				page = new Page(config.currentPage);
+				setSentence(page.nextSentence());
+				updateTitle();
+			}
+			else
+			{
+				JOptionPane.showMessageDialog( null, errorMsg);
+			}
+		}
+		catch(Exception exec)
+		{
+			exec.printStackTrace();
+		}				
+	}
+	
+	void onGoToUnansweredLine(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				int index = page.unAnsweredIndex();
+				
+				if(index == -1)
+				{
+					JOptionPane.showMessageDialog( null, "All the sentences are translated.");
+				}
+				else
+				{
+					setSentence(page.sentenceByIndex(index));
+					updateTitle();
+				}
+			}
+		});		
+	}
+	
+	void onGoToLine(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				String str = JOptionPane.showInputDialog("Enter line number");
+				
+				if(str != null)
+				{
+					try
+					{
+						int lineNumber = Integer.parseInt(str);
+						Sentence sentence = page.sentenceByIndex(lineNumber-1);
+						
+						if(sentence == null){
+							throw new Exception();
+						}
+						
+						setSentence(sentence);
+						updateTitle();
+					}
+					catch(Exception exc)
+					{
+						JOptionPane.showMessageDialog( null, "Invalid line number");
+						return;
+					}
+				}
+			}
+		});		
 	}
 	
 	void onGoToPageStart(JButton btn)
 	{
 		btn.addActionListener(new ActionListener()
 		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  page.goToStart();
-			  setSentence(page.nextSentence());
-		  }
+			public void actionPerformed(ActionEvent e)
+			{
+				setSentence(page.firstSentence());
+				updateTitle();
+			}
 		});
 	}
 
@@ -78,11 +216,11 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	{
 		btn.addActionListener(new ActionListener()
 		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  page.goToEnd();
-			  setSentence(page.prevSentence());
-		  }
+			public void actionPerformed(ActionEvent e)
+			{
+				setSentence(page.lastSentence());
+				updateTitle();
+			}
 		});
 	}
 	
