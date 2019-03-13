@@ -78,7 +78,7 @@ class UIBuilder
 	{
 		int btnH = 30;
 		int btnW = 175;
-		int gapBtw = 10;
+		int gapBtw = 1;
 		
 		ref.goToPageStart = new JButton("Page Start");
 		ref.goToPageEnd   = new JButton("Page End");
@@ -87,6 +87,7 @@ class UIBuilder
 		ref.prevPage  = new JButton("Prev Page");
 		ref.nextPage  = new JButton("Next Page");
 		ref.goToPage  = new JButton("Go To Page");
+		ref.convertRawPageToPage = new JButton("Convert RawPage");
 		
 		ref.goToPageStart.setBounds(x, y, btnW, btnH); 		x = x+btnW+gapBtw;
 		ref.goToPageEnd.setBounds(x, y, btnW, btnH); 		x = x+btnW+gapBtw;
@@ -95,6 +96,7 @@ class UIBuilder
 		ref.prevPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;
 		ref.nextPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;
 		ref.goToPage.setBounds(x, y, btnW, btnH); 			x = x+btnW+gapBtw;		
+		ref.convertRawPageToPage.setBounds(x, y, btnW, btnH); x = x+btnW+gapBtw;
 		
 		contentPane.add(ref.goToPageStart);
 		contentPane.add(ref.goToPageEnd);
@@ -103,6 +105,7 @@ class UIBuilder
 		contentPane.add(ref.prevPage);
 		contentPane.add(ref.nextPage);
 		contentPane.add(ref.goToPage);		
+		contentPane.add(ref.convertRawPageToPage);		
 	}
 	
 	JLabel createLabel(int x, int y, int w, int h)

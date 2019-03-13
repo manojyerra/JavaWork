@@ -166,13 +166,41 @@ class Page
 			return list;
 		}
 	}
+	
+	static boolean convertRawPageToPage(String pageDir) throws Exception
+	{
+		String teluguFilePath = pageDir+"/Telugu.txt";
+		File teluguFile = new File(teluguFilePath);
+		
+		if(!teluguFile.exists())
+		{
+			return false;
+		}
+		else
+		{
+			RawPageReader rawPageReader = new RawPageReader(teluguFilePath);
+			ArrayList<String> lines = rawPageReader.getData();
+			FileUtils.writeList(teluguFilePath, lines);
+		}
+		
+		return true;
+	}
 }
 
-
-
-
-/*
-
+class RawPageReader
+{
+	ArrayList<String> fileData = null;
+	
+	RawPageReader(String filePath)throws Exception
+	{
+		fileData = readPage(filePath);
+	}
+	
+	ArrayList<String> getData()
+	{
+		return fileData;
+	}
+	
 	ArrayList<String> readPage(String filePath) throws Exception
 	{
 		ArrayList<String> list = new ArrayList<String>();
@@ -263,6 +291,5 @@ class Page
 		}
 		
 		return list;
-	}	
-
-*/
+	}		
+}

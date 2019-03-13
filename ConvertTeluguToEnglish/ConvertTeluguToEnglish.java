@@ -34,6 +34,7 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	JButton nextPage = null;
 	JButton prevPage = null;
 	JButton goToPage = null;
+	JButton convertRawPageToPage = null;
 	
 	Page page = null;
 	ConfigReader config = null;
@@ -65,9 +66,41 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 		onNextPage(nextPage);
 		onPrevPage(prevPage);
 		onGoToPage(goToPage);
-		setVisible(true);
+		onConvertRawPageToPage(convertRawPageToPage);
 		
+		setVisible(true);
 		updateTitle();
+	}
+	
+	void onConvertRawPageToPage(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				String str = JOptionPane.showInputDialog("Enter page name");
+				
+				if(str != null)
+				{
+					try
+					{
+						if((new File("Pages/"+str)).exists())
+						{
+							boolean result = Page.convertRawPageToPage("Pages/"+str);
+							String msg = result ? "Done" : "Failed to convert raw page.";
+							JOptionPane.showMessageDialog(null, msg);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog( null, str+" not exist.");
+						}
+					}
+					catch(Exception exc)
+					{
+					}
+				}
+			}
+		});	
 	}
 	
 	void onGoToPage(JButton btn)
