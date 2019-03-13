@@ -27,8 +27,15 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	JTextArea prevWriteTextArea = null;
 	JTextArea writeTextArea = null;
 	
+	JButton goToPageStart = null;
+	JButton goToPageEnd = null;
+	JButton nextPage = null;
+	JButton prevPage = null;
+	
 	Page page = null;
 	ConfigReader config = null;
+	
+	UIBuilder uiBuilder;
 
 	public static void main(String[] args)  throws Exception
 	{
@@ -39,28 +46,56 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	{	
 		config = new ConfigReader("config.json");
 		
-		int sw = config.screenInfo.screenW; 
-		int sh = config.screenInfo.screenH;
-				
-		config.write("config.json");
+		uiBuilder = new UIBuilder(this);
+		uiBuilder.build();
 		
-		setSize(sw+18, sh+30);
-		setLayout(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		 
-		setTitle("Practie telugu to english conversion");
-		getContentPane().setBackground(Color.GRAY);
-
-		buildUI(0, 0, sw, sh, getContentPane());
+		page = new Page(config.currentPage);		
+		setSentence(page.nextSentence());
 
 		onEnter(writeTextArea);
 		onShiftAndEnter(writeTextArea);
-		
-		page = new Page(config.currentPage);
-		
-		setSentence(page.nextSentence());
-
 		onJFrameClose(this);
+		onGoToPageStart(goToPageStart);
+		onGoToPageEnd(goToPageEnd);		
 		setVisible(true);
+		
+		updateTitle();
+	}
+	
+	void onGoToPageStart(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  page.goToStart();
+			  setSentence(page.nextSentence());
+		  }
+		});
+	}
+
+	void onGoToPageEnd(JButton btn)
+	{
+		btn.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+			  page.goToEnd();
+			  setSentence(page.prevSentence());
+		  }
+		});
+	}
+	
+	void updateTitle()
+	{
+		int pageNum = config.currentPage.pageNumber;
+		int lineNum = config.currentPage.lineNumber;
+		int totLines = page.getTotalLines();
+		
+		String str = "Practie telugu to english conversion.";
+		String info = "Page Number : "+pageNum+"   Line Number : "+lineNum+" / "+totLines;
+		
+		setTitle(str+"    "+info);
 	}
 	
 	void setSentence(Sentence sentence)
@@ -106,6 +141,8 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 				
 				if(page.hasNextSentence())
 					setSentence(page.nextSentence());
+				
+				updateTitle();
             }
         });		
 	}
@@ -127,66 +164,10 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 
 				if(page.hasPrevSentence())
 					setSentence(page.prevSentence());
+				
+				updateTitle();
             }
         });		
-	}
-	
-	void buildUI(int x, int y, int w, int h, Container contentPane)
-	{
-		int textAreaH = (int)(h/4) - 10;		
-		
-		teluguTextArea 		= createLabel(x, y, w, textAreaH); y += h/4;
-		writeTextArea 		= createTextArea(x, y, w, textAreaH); y += h/4;
-		googleTextArea 		= createTextArea(x, y, w, textAreaH); y += h/4;
-		prevWriteTextArea	= createTextArea(x, y, w, textAreaH); 
-		
-		teluguTextArea.setFont(createTeluguFont("Mandali", Font.PLAIN, 18));
-		writeTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
-		googleTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));
-		prevWriteTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
-		
-		contentPane.add(teluguTextArea);
-		contentPane.add(writeTextArea);
-		contentPane.add(googleTextArea);
-		contentPane.add(prevWriteTextArea);
-	}
-	
-	JLabel createLabel(int x, int y, int w, int h)
-	{
-		JLabel label = new JLabel();
-		label.setOpaque(true);	
-		label.setBackground(Color.BLACK);
-		label.setForeground(Color.WHITE);
-		label.setBounds(x, y, w, h);
-		//label.setLineWrap(true);
-        //label.setWrapStyleWord(true);
-		return label;
-	}
-
-	JTextArea createTextArea(int x, int y, int w, int h)
-	{
-		JTextArea textArea = new JTextArea();
-		textArea.setBackground(Color.BLACK);
-		textArea.setForeground(Color.WHITE);		
-		textArea.setBounds(x, y, w, h);
-		textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-		return textArea;
-	}
-	
-	Font createTeluguFont(String fontName, int fontStyle, int fontSize)
-	{
-		createFont("fonts/"+fontName+".ttf");
-		return new Font(fontName, fontStyle, fontSize);		
-	}
-	
-	public void createFont(String fontFilePath)
-	{
-		try {
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File(fontFilePath)));
-		} catch (IOException|FontFormatException e) {			
-		}		
 	}
 }
 

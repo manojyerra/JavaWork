@@ -41,10 +41,25 @@ class Page
 		
 		return sentence;
 	}
+	
+	void goToStart()
+	{
+		arrIndex = -1;
+	}
+	
+	void goToEnd()
+	{
+		arrIndex = teluguArr.size();
+	}
 
 	boolean hasNextSentence()
 	{
 		return (arrIndex+1 < teluguArr.size());
+	}
+	
+	int getTotalLines()
+	{
+		return teluguArr.size();
 	}
 	
 	Sentence prevSentence()
