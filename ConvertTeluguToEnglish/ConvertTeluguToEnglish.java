@@ -48,6 +48,7 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 		setLayout(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		 
 		setTitle("Practie telugu to english conversion");
+		getContentPane().setBackground(Color.GRAY);
 
 		buildUI(0, 0, sw, sh, getContentPane());
 
@@ -143,7 +144,6 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 		writeTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
 		googleTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));
 		prevWriteTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
-		//teluguTextArea.setEditable(false);
 		
 		contentPane.add(teluguTextArea);
 		contentPane.add(writeTextArea);
@@ -153,13 +153,14 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	
 	JLabel createLabel(int x, int y, int w, int h)
 	{
-		JLabel textArea = new JLabel();
-		//textArea.setBackground(Color.BLACK);
-		//textArea.setForeground(Color.GRAY);		
-		textArea.setBounds(x, y, w, h);
-		//textArea.setLineWrap(true);
-        //textArea.setWrapStyleWord(true);
-		return textArea;
+		JLabel label = new JLabel();
+		label.setOpaque(true);	
+		label.setBackground(Color.BLACK);
+		label.setForeground(Color.WHITE);
+		label.setBounds(x, y, w, h);
+		//label.setLineWrap(true);
+        //label.setWrapStyleWord(true);
+		return label;
 	}
 
 	JTextArea createTextArea(int x, int y, int w, int h)
