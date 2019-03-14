@@ -12,6 +12,8 @@ public class UIUtils
 		int textWidth = fm.stringWidth(text);
 		int labelW = label.getWidth();
 		
+		//System.out.println("textWidth:"+textWidth);
+		
 		if(labelW > textWidth)
 		{
 			label.setText(text);
@@ -23,37 +25,44 @@ public class UIUtils
 			
 			StringBuffer sb = new StringBuffer("<html>");
 			
-			int txtLen = text.length();
-			
-			for(int i=0; i<txtLen; i++)
-			{
-				char ch = text.charAt(i);
+			try{
+				int txtLen = text.length();
 				
-				if(ch == ' ' || i == txtLen-1)
+				for(int i=0; i<txtLen; i++)
 				{
-					String subStr = text.substring(lineStartI, i+1);
-					int subStrWidth = fm.stringWidth(subStr);
+					char ch = text.charAt(i);
 					
-					if(subStrWidth > labelW)
+					if(ch == ' ' || i == txtLen-1)
 					{
-						//System.out.println("subString:"+subStrWidth);
-						sb.append(text.substring(lineStartI, wordStartI));
-						sb.append("<br/>");
-						i = wordStartI;
-						lineStartI = wordStartI;
-					}
-					else
-					{
-						if(i == txtLen-1)
+						String subStr = text.substring(lineStartI, i+1);
+						int subStrWidth = fm.stringWidth(subStr);
+						
+						if(subStrWidth > labelW)
 						{
-							sb.append(text.substring(lineStartI, txtLen));
+							//System.out.println("subString:"+subStrWidth);
+							sb.append(text.substring(lineStartI, wordStartI));
+							sb.append("<br/>");
+							i = wordStartI;
+							lineStartI = wordStartI;
 						}
 						else
 						{
-							wordStartI = i;
+							if(i == txtLen-1)
+							{
+								sb.append(text.substring(lineStartI, txtLen));
+							}
+							else
+							{
+								wordStartI = i;
+							}
 						}
 					}
 				}
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception at wrapLabelText : ");
+				e.printStackTrace();
 			}
 			
 			sb.append("</html>");
