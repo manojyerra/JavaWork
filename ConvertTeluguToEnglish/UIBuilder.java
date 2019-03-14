@@ -63,7 +63,7 @@ class UIBuilder
 		ref.googleTextArea 		= createTextArea(x, y, w, textAreaH); y += h/4;
 		ref.prevWriteTextArea	= createTextArea(x, y, w, textAreaH); 
 		
-		ref.teluguTextArea.setFont(createTeluguFont("Mandali", Font.PLAIN, 18));
+		ref.teluguTextArea.setFont(createTeluguFont("Mandali", Font.PLAIN, 16));
 		ref.writeTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
 		ref.googleTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));
 		ref.prevWriteTextArea.setFont(new Font("Times Roman",Font.PLAIN, 20));		
