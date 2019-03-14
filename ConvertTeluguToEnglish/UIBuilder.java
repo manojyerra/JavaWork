@@ -56,7 +56,7 @@ class UIBuilder
 	
 	private void createTextRel(int x, int y, int w, int h, Container contentPane)
 	{
-		int textAreaH = (int)(h/4) - 10;		
+		int textAreaH = (int)(h/4) - 5;		
 		
 		ref.teluguTextArea 		= createLabel(x, y, w, textAreaH); y += h/4;
 		ref.writeTextArea 		= createTextArea(x, y, w, textAreaH); y += h/4;

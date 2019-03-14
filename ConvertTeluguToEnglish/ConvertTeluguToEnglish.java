@@ -271,7 +271,9 @@ public class ConvertTeluguToEnglish extends JFrame //implements DocumentListener
 	
 	void setSentence(Sentence sentence)
 	{
-		teluguTextArea.setText(sentence.telugu);
+		//teluguTextArea.setText(sentence.telugu);
+		UIUtils.wrapLabelText(teluguTextArea, sentence.telugu);
+		
 		googleTextArea.setText("Google Tranlation : \n"+sentence.english);
 		prevWriteTextArea.setText(sentence.conversion);
 	}
