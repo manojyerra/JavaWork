@@ -10,7 +10,15 @@ class ClientAccess
 	
 	public static void main(String[] args) throws Exception
 	{
-		new ClientAccess();
+		long startTime = System.currentTimeMillis();
+		boolean isConnected = isInternetConnected_1();
+		System.out.println(isConnected+" Time1: "+(System.currentTimeMillis() - startTime));
+		
+		startTime = System.currentTimeMillis();
+		isInternetConnected_2();
+		System.out.println(isConnected+" Time2: "+(System.currentTimeMillis() - startTime));
+		
+		//new ClientAccess();
 	}
 
 	ClientAccess() throws Exception
@@ -52,6 +60,27 @@ class ClientAccess
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	static boolean isInternetConnected_1() throws Exception
+	{
+		Process process = Runtime.getRuntime().exec("ping www.geeksforgeeks.org");
+        return (process.waitFor() == 0);
+	}
+	
+	static boolean isInternetConnected_2()
+	{
+		try
+		{ 
+            URL url = new URL("https://www.geeksforgeeks.org/");
+            URLConnection connection = url.openConnection(); 
+            connection.connect(); 
+        } 
+        catch (Exception e) { 
+            return false;
+        } 
+		
+		return true;		
 	}
 	
 	void copyFiles(String srcDir, String desDir, String ext)
