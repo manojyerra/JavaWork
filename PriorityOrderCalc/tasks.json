@@ -1,0 +1,23 @@
+[
+	{
+		"taskName" : "GLFW Event video making",
+		"priority" : 3,
+		"taskTimeInHours" : 3,
+		"isLongTermTask" : false,
+		"deadLineInHours" : 96
+	},
+	{
+		"taskName" : "Linked Array video making",
+		"priority" : 5,
+		"taskTimeInHours" : 5,
+		"isLongTermTask" : false,
+		"deadLineInHours" : 48
+	},
+	{
+		"taskName" : "Apply jobs in naukari",
+		"priority" : 5,
+		"taskTimeInHours" : 0.3,
+		"isLongTermTask" : false,
+		"deadLineInHours" : 24
+	}
+]
