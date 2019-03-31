@@ -1,7 +1,7 @@
 [
 	{
 		"taskName" : "GLFW Event video making",
-		"priority" : 3,
+		"priority" : 2,
 		"taskTimeInHours" : 3,
 		"isLongTermTask" : false,
 		"deadLineInHours" : 96
@@ -9,7 +9,7 @@
 	{
 		"taskName" : "Linked Array video making",
 		"priority" : 5,
-		"taskTimeInHours" : 5,
+		"taskTimeInHours" : 4,
 		"isLongTermTask" : false,
 		"deadLineInHours" : 48
 	},
@@ -19,5 +19,27 @@
 		"taskTimeInHours" : 0.3,
 		"isLongTermTask" : false,
 		"deadLineInHours" : 24
+	},
+	{
+		"taskName" : "UR Problem",
+		"priority" : 4,
+		"taskTimeInHours" : 0.3,
+		"isLongTermTask" : true,
+		"deadLineInHours" : 0
+	},
+	{
+		"taskName" : "Meditation",
+		"priority" : 3,
+		"taskTimeInHours" : 0.3,
+		"isLongTermTask" : true,
+		"deadLineInHours" : 0
+	},
+	{
+		"taskName" : "Repetition",
+		"priority" : 4,
+		"taskTimeInHours" : 0.3,
+		"isLongTermTask" : true,
+		"deadLineInHours" : 0
 	}
+	
 ]

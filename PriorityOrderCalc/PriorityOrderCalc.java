@@ -23,23 +23,37 @@ class Task
 	{
 		if(deadLineInHours > 0)
 		{
-			double coff = 24.0 * 10.0 / (deadLineInHours * taskTimeInHours);
+			double deadLineWOTaskTime = deadLineInHours - taskTimeInHours;
+			
+			if(deadLineInHours <= 0)
+				return Double.MAX_VALUE;
+			
+			double coff = 24.0 * 10.0 / deadLineWOTaskTime;
 			return priority * coff;
 		}
 		
 		return priority;
+	}
+	
+	double priorityAfterDeadLineAndTerm()
+	{
+		double prior = calcPriorityByDeadLine();
+		return isLongTermTask ? prior / 2.0 : prior;
 	}
 }
 
 class SortByTask implements Comparator<Task>
 {
 	public int compare(Task t1, Task t2) 
-    { 		
-		double t1Priority = t1.calcPriorityByDeadLine();
-		double t2Priority = t2.calcPriorityByDeadLine();
+    {
+		double t1Priority = t1.priorityAfterDeadLineAndTerm();
+		double t2Priority = t2.priorityAfterDeadLineAndTerm();
+	
+		//double t1Priority = t1.calcPriorityByDeadLine();
+		//double t2Priority = t2.calcPriorityByDeadLine();
 		
-		t1Priority = t1.isLongTermTask ? t1Priority / 2.5 : t1Priority;
-		t2Priority = t2.isLongTermTask ? t2Priority / 2.5 : t2Priority;
+		//t1Priority = t1.isLongTermTask ? t1Priority / 2.0 : t1Priority;
+		//t2Priority = t2.isLongTermTask ? t2Priority / 2.0 : t2Priority;
 		
 		if(t1Priority > t2Priority)
 		{
@@ -86,11 +100,8 @@ class PriorityOrderCalc
 	}
 }
 
-
-			// System.out.println("taskName:"+map.get("taskName"));
-			// System.out.println("priority:"+map.get("priority"));
-			// System.out.println("taskTimeInHours:"+map.get("taskTimeInHours"));
-			// System.out.println("isLongTermTask:"+map.get("isLongTermTask"));
-			// System.out.println("deadLineInHours:"+map.get("deadLineInHours"));			
-
-
+// System.out.println("taskName:"+map.get("taskName"));
+// System.out.println("priority:"+map.get("priority"));
+// System.out.println("taskTimeInHours:"+map.get("taskTimeInHours"));
+// System.out.println("isLongTermTask:"+map.get("isLongTermTask"));
+// System.out.println("deadLineInHours:"+map.get("deadLineInHours"));
