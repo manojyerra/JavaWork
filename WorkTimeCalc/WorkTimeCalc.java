@@ -91,8 +91,6 @@ class WorkTimeCalc
 		
 		String text = currentTimeMillis+" "+continuesTime+" "+mousePos+" "+currDate;
 		
-		System.out.println(text);
-		
 		bw.write(text, 0, text.length());
 		bw.newLine();
 		bw.flush();
@@ -116,6 +114,9 @@ class WorkTimeCalc
 	
 	int calcTime(String filePath) throws IOException
 	{
+		if(!(new File(filePath)).exists())
+			return 0;
+			
 		BufferedReader br = new BufferedReader(new FileReader(filePath));
 		
 		String line = "";
