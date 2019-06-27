@@ -55,7 +55,8 @@ class WorkTimeCalc
 			
 			Point currPos = MouseInfo.getPointerInfo().getLocation();
 			
-			if(isEqual(currPos, prevPos) == false)
+			//if(!isEqual(currPos, prevPos) && !Utils.isChromeRunning())
+			if(!isEqual(currPos, prevPos))
 			{
 				continuesTime += sleepTimeInMin;
 				writeTime(filePreFix, continuesTime, System.currentTimeMillis(), data.getPath(), currPos);
