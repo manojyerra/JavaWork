@@ -14,22 +14,27 @@ import java.awt.image.BufferedImage;
 
 class BitmapFontCreator
 {
-	int fontSize = 18;
-	String fontName = "Helvetica";
-	int fontStyle = Font.PLAIN;
+	private int _fontSize = 18;
+	private String _fontName = "Helvetica";
+	private int _fontStyle = Font.PLAIN;
 	
-	Font font = new Font(fontName, fontStyle, fontSize);
+	private Font _font = new Font(_fontName, _fontStyle, _fontSize);
 	
-	String letters1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	String letters2 = "abcdefghijklmnopqrstuvwxyz";
-	String letters3 = "0123456789";
-	String letters4 = "`!\"$%^&*()-_=+[{]};:'@#\\|,<.>/?~";
+	private String _letters1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private String _letters2 = "abcdefghijklmnopqrstuvwxyz";
+	private String _letters3 = "0123456789";
+	private String _letters4 = "`!\"$%^&*()-_=+[{]};:'@#\\|,<.>/?~";
 	
-	String fontImgName = fontName+"_"+fontSize+".png";
-	String uvFileName = fontName+"_"+fontSize+".txt";
+	private int _offSetX1 = 3;
+	private int _offSetX2 = 3;
+	private int _horGap = 3;
+	private int _verGap = 4;
 	
-	BufferedWriter bw = new BufferedWriter(new FileWriter(uvFileName));
-	Graphics globalGraphics = null;
+	private String _fontImgName = _fontName+"_"+_fontSize+".png";
+	private String _uvFileName = _fontName+"_"+_fontSize+".txt";
+	
+	private BufferedWriter _bw = new BufferedWriter(new FileWriter(_uvFileName));
+	private Graphics _globalGraphics = null;
 
 	public static void main(String[] args) throws Exception
 	{
@@ -39,39 +44,42 @@ class BitmapFontCreator
 	BitmapFontCreator() throws Exception
 	{
 		BufferedImage tempImg = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
-		globalGraphics = tempImg.getGraphics();
+		_globalGraphics = tempImg.getGraphics();
 		
-		int imgWidth = TextWidth("ABCDEFGHIJKLMNOPQRSTUVWXYZ", font) + 26*5;
+		int imgWidth = GetMaxTextureWidth();
+		int imgHeight = GetMaxTextureHeight();
 		
-		BufferedImage bufImg = new BufferedImage(imgWidth, fontSize*7, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bufImg = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics2D g = bufImg.createGraphics();
-		g.setFont(font);
+		g.setFont(_font);
 		g.setColor(Color.black);
+		g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+
+		int x = _offSetX1;
+		int y = _verGap+_fontSize;
+
+		DrawOnTexture(_letters1, g, x, y, _horGap);
 		
+		y += _verGap+_fontSize;
+		DrawOnTexture(_letters2, g, x, y, _horGap);
 
-		int horGap = 3;
-		int verGap = 4;
-		int x = 3;
-		int y = verGap+fontSize;
+		y += _verGap+_fontSize;
+		DrawOnTexture(_letters3, g, x, y, _horGap);
 
-		DrawOnTexture(letters1, g, x, y, horGap);
-		
-		y += verGap+fontSize;
-		DrawOnTexture(letters2, g, x, y, horGap);
-
-		y += verGap+fontSize;
-		DrawOnTexture(letters3, g, x, y, horGap);
-
-		y += verGap+fontSize;
-		DrawOnTexture(letters4, g, x, y, horGap);
+		y += _verGap+_fontSize;
+		DrawOnTexture(_letters4, g, x, y, _horGap);
 		
 		g.dispose();
 		
-		ImageIO.write(bufImg, "png", new File(fontImgName));
+		ImageIO.write(bufImg, "png", new File(_fontImgName));
 		
-		bw.close();
+		_bw.close();
 	}
 
 	void DrawOnTexture(String str, Graphics2D g, int startX, int startY, int horGap) throws Exception
@@ -82,17 +90,38 @@ class BitmapFontCreator
 		for(int i=0; i<str.length(); i++)
 		{
 			String charStr = ""+str.charAt(i);
-			int letterWidth = TextWidth(charStr, font);
+			int letterWidth = TextWidth(charStr, _font);
 			
 			g.drawString(charStr, x, y);
 
-			String line = charStr +" "+(x-1)+" "+(y-fontSize)+" "+(letterWidth+2)+" "+fontSize;
-			bw.write(line, 0, line.length());
-			bw.newLine();
+			String line = charStr +" "+(x-1)+" "+(y-_fontSize)+" "+(letterWidth+2)+" "+_fontSize;
+			_bw.write(line, 0, line.length());
+			_bw.newLine();
 			
 			x += letterWidth+horGap;
 		}
+	}
+	
+	int GetMaxTextureWidth()
+	{
+		int maxWidth = 0;
 		
+		int textWidth1 = TextWidth(_letters1, _offSetX1, _offSetX2, _horGap);
+		int textWidth2 = TextWidth(_letters2, _offSetX1, _offSetX2, _horGap);
+		int textWidth3 = TextWidth(_letters3, _offSetX1, _offSetX2, _horGap);
+		int textWidth4 = TextWidth(_letters4, _offSetX1, _offSetX2, _horGap);
+		
+		if(textWidth1 > maxWidth) maxWidth = textWidth1;
+		if(textWidth2 > maxWidth) maxWidth = textWidth2;
+		if(textWidth3 > maxWidth) maxWidth = textWidth3;
+		if(textWidth4 > maxWidth) maxWidth = textWidth4;
+		
+		return maxWidth;
+	}
+	
+	int GetMaxTextureHeight()
+	{
+		return 4*(_verGap+_fontSize) + 3*_verGap;
 	}
 
 	int TextWidth(String text, Font font)
@@ -102,9 +131,15 @@ class BitmapFontCreator
 		//int textwidth = (int)(font.getStringBounds(text, frc).getWidth());
 		//return textwidth;
 		
-		FontMetrics metrics = globalGraphics.getFontMetrics(font);
+		FontMetrics metrics = _globalGraphics.getFontMetrics(font);
 		int hgt = metrics.getHeight();
 		return metrics.stringWidth(text);
+	}
+	
+	int TextWidth(String text, int offSetX1, int offSetX2, int horGap)
+	{
+		int textLen = TextWidth(text, _font);
+		return offSetX1 + offSetX2 + textLen + (text.length() * horGap);
 	}
 }
 
