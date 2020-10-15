@@ -14,11 +14,12 @@ import java.awt.image.BufferedImage;
 
 class BitmapFontCreator
 {
-	private int _fontSize = 18;
+	private int _fontSize = 15;
 	private String _fontName = "Helvetica";
-	private int _fontStyle = Font.PLAIN;
+	private int _fontStyle = Font.BOLD;
 	
 	private Font _font = new Font(_fontName, _fontStyle, _fontSize);
+	private int _descent = 0;
 	
 	private String _letters1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private String _letters2 = "abcdefghijklmnopqrstuvwxyz";
@@ -45,6 +46,9 @@ class BitmapFontCreator
 	{
 		BufferedImage tempImg = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
 		_globalGraphics = tempImg.getGraphics();
+
+		FontMetrics metrics = _globalGraphics.getFontMetrics(_font);
+		_descent = metrics.getDescent();
 		
 		int imgWidth = GetMaxTextureWidth();
 		int imgHeight = GetMaxTextureHeight();
@@ -94,7 +98,7 @@ class BitmapFontCreator
 			
 			g.drawString(charStr, x, y);
 
-			String line = charStr +" "+(x-1)+" "+(y-_fontSize)+" "+(letterWidth+2)+" "+_fontSize;
+			String line = charStr +" "+(x-1)+" "+(y-_fontSize+_descent)+" "+(letterWidth+2)+" "+_fontSize;
 			_bw.write(line, 0, line.length());
 			_bw.newLine();
 			
