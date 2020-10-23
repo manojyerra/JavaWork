@@ -14,11 +14,11 @@ import java.awt.image.BufferedImage;
 
 class BitmapFontCreator
 {
-	private int _fontSize = 15;
-	private String _fontName = "Helvetica";
-	private int _fontStyle = Font.BOLD;
+	private int _fontSize = 13;
+	private String _fontName = "Monaco";
+	private int _fontStyle = Font.PLAIN;
 	
-	private Font _font = new Font(_fontName, _fontStyle, _fontSize);
+	private Font _font = null;
 	private int _descent = 0;
 	
 	private String _letters1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -31,8 +31,8 @@ class BitmapFontCreator
 	private int _horGap = 3;
 	private int _verGap = 4;
 	
-	private String _fontImgName = _fontName+"_"+_fontSize+".png";
-	private String _uvFileName = _fontName+"_"+_fontSize+".txt";
+	private String _fontImgName = "img.png";
+	private String _uvFileName = "uv.txt";
 	
 	private BufferedWriter _bw = new BufferedWriter(new FileWriter(_uvFileName));
 	private Graphics _globalGraphics = null;
@@ -44,6 +44,16 @@ class BitmapFontCreator
 	
 	BitmapFontCreator() throws Exception
 	{
+		BufferedReader br = new BufferedReader(new FileReader("FontInfo.txt"));
+		_fontName = br.readLine();
+		_fontSize = Integer.parseInt(br.readLine());
+		br.close();
+		
+		System.out.println("FontName:"+_fontName);
+		System.out.println("FontSize:"+_fontSize);
+		
+		_font = new Font(_fontName, _fontStyle, _fontSize);
+		
 		BufferedImage tempImg = new BufferedImage(100, 100, BufferedImage.TYPE_INT_ARGB);
 		_globalGraphics = tempImg.getGraphics();
 
@@ -90,6 +100,8 @@ class BitmapFontCreator
 	{
 		int x = startX;
 		int y = startY;
+		
+		g.setColor(Color.WHITE);
 		
 		for(int i=0; i<str.length(); i++)
 		{
