@@ -25,6 +25,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import scroll.ScrollBar;
 import scroll.ScrollListener;
 import scroll.ScrollEvent;
@@ -32,7 +35,7 @@ import scroll.ScrollEvent;
 import javax.swing.JLabel;
 
 
-class ListGrid extends Panel implements ScrollListener, MouseWheelListener, MouseListener
+class ListGrid extends Panel implements ScrollListener, MouseWheelListener, MouseListener, KeyListener
 {
 	private ArrayList<RowUI> _labels = new ArrayList<RowUI>();
 	private ArrayList<String> _rows;
@@ -175,7 +178,11 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
 		int notches = e.getWheelRotation();
-
+		moveAndUpdateScroll(notches);
+	}
+	
+	public void moveAndUpdateScroll(int notches)
+	{
 		move(notches);
 
 		if(_linkedListGrid != null)
@@ -192,7 +199,7 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 
 			if(_linkedListGrid != null)
 				_linkedListGrid._vScrollBar.setPointerPos(scrollAmount);
-		}
+		}	
 	}
 	
 
@@ -378,7 +385,16 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 
 		if(rowIndex >= 0 && rowIndex < _rows.size())
 		{
-			if(e.getButton() == MouseEvent.BUTTON3)
+			if(e.getButton() == MouseEvent.BUTTON2)
+			{
+				undoChange(rowIndex);
+				
+				setTextOnLabels(_topIndex);
+				
+				if(_linkedListGrid != null)
+					_linkedListGrid.setTextOnLabels(_topIndex);
+			}
+			else if(e.getButton() == MouseEvent.BUTTON2)
 			{
 				undoChange(rowIndex);
 				
@@ -414,9 +430,39 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 						_linkedListGrid.setTextOnLabels(_topIndex);
 				}
 			}
+			else if(e.getButton() == MouseEvent.BUTTON3)
+			{
+				int middleIndex = _topIndex + _labels.size() / 2;
+				int startIndex = middleIndex;
+
+				while(canUndo(startIndex++) != 0);
+				while(canUndo(startIndex++) == 0);
+				
+				int diff = startIndex - middleIndex;
+
+				moveAndUpdateScroll(diff);
+			}
 		}
 	}
 
+	public void keyReleased(java.awt.event.KeyEvent e)
+	{		
+		int keyCode = e.getKeyCode();
+	
+		System.out.println("Key Released "+keyCode);
+
+		if(keyCode == KeyEvent.VK_HOME)
+		{
+			moveAndUpdateScroll(-_topIndex-1);
+		}
+		else if(keyCode == KeyEvent.VK_END)
+		{
+			moveAndUpdateScroll(_rows.size()+1);
+		}
+	}
+	
+	public void keyTyped(java.awt.event.KeyEvent e){}
+	public void keyPressed(java.awt.event.KeyEvent e){}
 
 	public void mouseClicked(java.awt.event.MouseEvent e){}
 	public void mousePressed(java.awt.event.MouseEvent e){}
