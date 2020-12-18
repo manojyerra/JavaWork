@@ -29,6 +29,7 @@ public class DiffBlocksViewer extends Panel
 	ArrayList<String> _rightTableData = new ArrayList<String>();
 	
 	private DiffColor _diffColor = new DiffColor();
+	private static final int ROW_HEIGHT = 22;
 	
 	DiffBlocksViewer(ArrayList diffData, int x, int y, int w, int h)
 	{
@@ -40,11 +41,11 @@ public class DiffBlocksViewer extends Panel
 		
 		retriveTablesData( _diffBlocks );
 		
-		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, 23, _leftTableData);
+		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, ROW_HEIGHT, _leftTableData);
 		
 		int scrollBarW = _tableLeft.getScrollBarWidth();
 		
-		_tableRight = new ListGrid(0, 0, w/2 - scrollBarW, h, 23, _rightTableData);
+		_tableRight = new ListGrid(0, 0, w/2 - scrollBarW, h, ROW_HEIGHT, _rightTableData);
 		
 		_tableLeft.setLinkedListGrid( _tableRight );
 		_tableRight.setLinkedListGrid( _tableLeft );
