@@ -83,7 +83,10 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 			diffBlockY1 = (int)(h*0.03f);
 		}
 		
-		diffBlockY2 = (int)(h*0.90f);
+		if(Util.isUnix())
+			diffBlockY2 = (int)(h*0.90f);
+		else
+			diffBlockY2 = (int)(h*0.935f);
 
 		int startY = diffBlockY2+10;
 
