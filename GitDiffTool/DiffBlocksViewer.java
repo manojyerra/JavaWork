@@ -13,11 +13,12 @@ import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.Insets;
+import java.awt.Graphics;
 
 import javax.swing.JFrame;
 
 
-class DiffBlocksViewer extends Panel
+public class DiffBlocksViewer extends Panel
 {
 	ArrayList<DiffBlock> _diffBlocks = null;
 	
@@ -27,6 +28,7 @@ class DiffBlocksViewer extends Panel
 	ArrayList<String> _leftTableData = new ArrayList<String>();
 	ArrayList<String> _rightTableData = new ArrayList<String>();
 	
+	private DiffColor _diffColor = new DiffColor();
 	
 	DiffBlocksViewer(ArrayList diffData, int x, int y, int w, int h)
 	{
@@ -39,14 +41,27 @@ class DiffBlocksViewer extends Panel
 		retriveTablesData( _diffBlocks );
 		
 		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, 23, _leftTableData);
-		_tableRight = new ListGrid(0, 0, w/2, h, 23, _rightTableData);
+		
+		int scrollBarW = _tableLeft.getScrollBarWidth();
+		
+		_tableRight = new ListGrid(0, 0, w/2 - scrollBarW, h, 23, _rightTableData);
 		
 		_tableLeft.setLinkedListGrid( _tableRight );
 		_tableRight.setLinkedListGrid( _tableLeft );
 		
+		int diffX = _tableLeft.getX() - _tableRight.getScrollBarWidth();
+		int diffY = _tableLeft.getY();
+		int diffW = _tableLeft.getScrollBarWidth();
+		int diffH = _tableLeft.getHeight();
+		
+		_diffColor.setBounds(diffX, diffY, diffW, diffH);
+		_diffColor.repaint();
+		
 		add(_tableLeft);
 		add(_tableRight);
+		add(_diffColor);
 	}
+
 	
 	void retriveTablesData(ArrayList<DiffBlock> diffBlocks)
 	{
@@ -75,3 +90,38 @@ class DiffBlocksViewer extends Panel
 		return _tableRight.getData();
 	}
 }
+
+
+class DiffColor extends Label
+{
+	private Graphics _g = null;
+	private ArrayList<Integer> _yList = null;
+	private Color darkGreen = new Color(0,128,0);
+	
+	void setLineAt(ArrayList<Integer> yList)
+	{
+		_yList = yList;
+	}
+	
+    public void paint(Graphics g)
+	{
+		_g = g;
+				
+		g.setColor(darkGreen);
+        DrawLineAt(50);
+    }	
+	
+	void DrawLineAt(int y)
+	{
+		if(_g != null)
+		{
+			_g.fillRect(0, y, getWidth(), 3);
+		}
+	}
+}
+
+interface RevertChangeListener
+{
+	void changeReverted();
+}
+

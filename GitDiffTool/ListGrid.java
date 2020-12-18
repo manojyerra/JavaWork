@@ -50,14 +50,16 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 	private static final int SCROLL_BAR_W = 15;
 	
 	private ListGrid _linkedListGrid = null;
-
-
+	
+	private Color red   = new Color(220, 120, 120);
+	private Color green = new Color(120, 220, 120);
+	private Color gray  = new Color(150, 150, 150);
+	
+	private Color default_label_bg = new Color(32, 32, 32);
+	private Color default_label_fg = new Color(200, 200, 200);
+		
 	ListGrid(int x, int y, int w, int h, int rowH, ArrayList<String> rows)
 	{
-		//System.out.print(">>\n");
-		//Util.printList(rows);
-		//System.out.print("\n<<\n");
-
 		init(x, y, w, h, rowH, (ArrayList<String>)rows.clone());
 	}
 
@@ -72,6 +74,7 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 	{
 		super.setBounds(x, y, w, h);
 		super.setLayout(null);
+		super.setBackground(Color.GRAY);
 		
 		_rows = rows;
 
@@ -88,7 +91,12 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 		createLabels(_maxWidth, h-SCROLL_BAR_W, rowH);
 		setTextOnLabels(0);
 
-		_vScrollBar = new ScrollBar(ScrollBar.VERTICAL, getWidth()-SCROLL_BAR_W, 0, SCROLL_BAR_W, h-SCROLL_BAR_W);
+		int verScrollBarX = getWidth()-SCROLL_BAR_W;
+		int verScrollBarY = 0;
+		int verScrollBarW = SCROLL_BAR_W;
+		int verScrollBarH = h-SCROLL_BAR_W;
+		
+		_vScrollBar = new ScrollBar(ScrollBar.VERTICAL, verScrollBarX, verScrollBarY, verScrollBarW, verScrollBarH);
 		_vScrollBar.setPointerLen( (float)_labels.size() / (float)_rows.size());
 		_vScrollBar.addScrollListener(this);
 
@@ -101,9 +109,10 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 
         for(int i=0; i<_labels.size(); i++)
             super.add(_labels.get(i));
-
+			
         super.add( _hScrollBar.getPointer() );
         super.add( _hScrollBar.getBg() 		);
+		//super.add(_changesColors);
     }
 
 
@@ -111,26 +120,30 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
     {
     	return _rows;
     }
-
+	
+	
+	int getScrollBarWidth()
+	{
+		return SCROLL_BAR_W;
+	}
+	
 
 	private void createLabels(int w, int h, int rowH)
 	{
 		int numLabels = (int)((float)(h) / (float)rowH);
-						
-		Color c1 = new Color(240,240,240);
-		Color c2 = new Color(225,225,225);
-		
+				
 		for(int i=0; i<numLabels; i++)
 		{
 			RowUI label = new RowUI();
 
 			label.setBounds(0, i*rowH, w, rowH);
-			label.setForeground(Color.BLACK);
-			label.setBackground(Color.WHITE);
+			label.setForeground(default_label_fg);
+			label.setOpaque(true);
+			label.setBackground(default_label_bg);			
 			label.setFont(_font);
 			label.addMouseWheelListener(this);
 			label.addMouseListener(this);
-
+			
 			_labels.add( label );
 		}	
 	}
@@ -275,11 +288,6 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 		int numRows = _rows.size();
 		int numLabels = _labels.size();
 		
-		Color red   = new Color(220, 120, 120);
-		Color green = new Color(120, 220, 120);
-		Color gray  = new Color(150, 150, 150);
-
-		
 		for(int i=0; i<numLabels; i++)
 		{
 			RowUI label = _labels.get(i);
@@ -294,17 +302,28 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 					label.setText( line.substring(1,line.length()) );
 				
 				if(line == null)
+				{
 					label.setBackground(gray);
+				}
 				else if(line.startsWith("-"))
+				{
 					label.setBackground(red);
+					label.setForeground(Color.BLACK);
+				}
 				else if(line.startsWith("+"))
+				{
 					label.setBackground(green);
+					label.setForeground(Color.BLACK);
+				}
 				else
-					label.setBackground(Color.WHITE);
+				{
+					label.setForeground(default_label_fg);
+					label.setBackground(default_label_bg);
+				}
 			}
 			else
 			{
-				label.setBackground(Color.WHITE);
+				label.setBackground(default_label_bg);
 				label.setText("");
 			}
 		}

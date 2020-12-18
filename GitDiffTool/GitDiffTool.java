@@ -119,8 +119,8 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		changeDirectory.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		changeDirectory.addActionListener(this);
 		add(changeDirectory);
-
-		onRefesh();		
+		
+		onRefesh();
 	}
 
 	void readProperties() throws Exception
