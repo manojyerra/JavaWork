@@ -38,8 +38,8 @@ class DiffBlocksViewer extends Panel
 		
 		retriveTablesData( _diffBlocks );
 		
-		_tableLeft 	= new ListGrid(0, 	0, w/2, h, 23, _leftTableData);
-		_tableRight = new ListGrid(w/2, 0, w/2, h, 23, _rightTableData);
+		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, 23, _leftTableData);
+		_tableRight = new ListGrid(0, 0, w/2, h, 23, _rightTableData);
 		
 		_tableLeft.setLinkedListGrid( _tableRight );
 		_tableRight.setLinkedListGrid( _tableLeft );
