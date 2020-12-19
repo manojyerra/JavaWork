@@ -8,7 +8,8 @@ public class DiffColor extends Label
 	private Graphics _g = null;
 	private ArrayList<Integer> _yList = new ArrayList<Integer>();
 	private Color darkGreen = new Color(0,128,0);
-		
+	private int _rectH = 5;
+	
     public void paint(Graphics g)
 	{
 		_g = g;
@@ -28,7 +29,7 @@ public class DiffColor extends Label
 	{
 		if(_g != null)
 		{
-			_g.fillRect(0, y, getWidth(), 3);
+			_g.fillRect(0, y, getWidth(), _rectH);
 		}
 	}
 	
@@ -42,6 +43,8 @@ public class DiffColor extends Label
 			int height = (int)((float)rowNumbersList.get(i) * (float)lableH / (float)totRows);
 			_yList.add(height);
 		}
+		
+		_rectH = (int)((float)lableH / (float)totRows) + 1;
 		
 		repaint();
 	}
