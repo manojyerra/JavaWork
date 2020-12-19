@@ -69,7 +69,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 
 		setVisible(true);
 		setLayout(null);
-		getContentPane().setBackground( new Color(32,32,32) );
+		getContentPane().setBackground( new Color(64,64,64) );
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		readProperties();
@@ -92,33 +92,44 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 
 		int startY = diffBlockY2+10;
 
-		ch.setBounds(0,startY,(int)(w*0.5),(int)(h*0.05f));
+		ch.setBounds(0,startY,(int)(w*0.5),(int)(h*0.03f));
 		ch.setFont(new Font("TimesRoman", Font.BOLD, 15));
-		ch.addItemListener(this);
+		ch.setBackground(Color.darkGray);
+		ch.setForeground(Color.white);
 		add(ch);
 
-		refresh.setBounds((int)(w*0.50), startY,(int)(w*0.1), (int)(h*0.025f));
+		refresh.setBounds((int)(w*0.50), startY,(int)(w*0.1), (int)(h*0.03f));
 		refresh.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		refresh.setBackground(Color.darkGray);
+		refresh.setForeground(Color.white);
 		refresh.addActionListener(this);
 		add(refresh);
 
-		checkout.setBounds((int)(w*0.60), startY, (int)(w*0.1), (int)(h*0.025f));
+		checkout.setBounds((int)(w*0.60), startY, (int)(w*0.1), (int)(h*0.03f));
 		checkout.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		checkout.setBackground(Color.darkGray);
+		checkout.setForeground(Color.white);
 		checkout.addActionListener(this);
 		add(checkout);
 
-		checkoutAll.setBounds((int)(w*0.70), startY, (int)(w*0.1), (int)(h*0.025f));
+		checkoutAll.setBounds((int)(w*0.70), startY, (int)(w*0.1), (int)(h*0.03f));
 		checkoutAll.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		checkoutAll.setBackground(Color.darkGray);
+		checkoutAll.setForeground(Color.white);
 		checkoutAll.addActionListener(this);
 		add(checkoutAll);
 
-		saveFile.setBounds((int)(w*0.80), startY, (int)(w*0.1), (int)(h*0.025f));
+		saveFile.setBounds((int)(w*0.80), startY, (int)(w*0.1), (int)(h*0.03f));
 		saveFile.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		saveFile.setBackground(Color.darkGray);
+		saveFile.setForeground(Color.white);
 		saveFile.addActionListener(this);
 		add(saveFile);
 
-		changeDirectory.setBounds((int)(w*0.90), startY, (int)(w*0.1), (int)(h*0.025f));
+		changeDirectory.setBounds((int)(w*0.90), startY, (int)(w*0.1), (int)(h*0.03f));
 		changeDirectory.setFont(new Font("TimesRoman", Font.BOLD, 15));
+		changeDirectory.setBackground(Color.darkGray);
+		changeDirectory.setForeground(Color.white);
 		changeDirectory.addActionListener(this);
 		add(changeDirectory);
 		
