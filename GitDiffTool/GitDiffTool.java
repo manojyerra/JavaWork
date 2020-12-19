@@ -28,6 +28,7 @@ import java.awt.GraphicsDevice;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 
@@ -40,11 +41,11 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 	
 	Choice ch = new Choice();
 	
-	Button refresh = new Button("Refresh");
-	Button checkout = new Button("Checkout");	
-	Button checkoutAll = new Button("Checkout All");
-	Button saveFile = new Button("Save File");
-	Button changeDirectory = new Button("Change Project");
+	JButton refresh = new JButton("Refresh");
+	JButton checkout = new JButton("Checkout");	
+	JButton checkoutAll = new JButton("Checkout All");
+	JButton saveFile = new JButton("Save File");
+	JButton changeDirectory = new JButton("Change Project");
 
 	int diffBlockY1 = 0;
 	int diffBlockY2 = 0;
@@ -102,6 +103,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		refresh.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		refresh.setBackground(Color.darkGray);
 		refresh.setForeground(Color.white);
+		refresh.setOpaque(true);
 		refresh.addActionListener(this);
 		add(refresh);
 
@@ -110,6 +112,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		checkout.setBackground(Color.darkGray);
 		checkout.setForeground(Color.white);
 		checkout.addActionListener(this);
+		checkout.setOpaque(true);
 		add(checkout);
 
 		checkoutAll.setBounds((int)(w*0.70), startY, (int)(w*0.1), (int)(h*0.03f));
@@ -117,6 +120,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		checkoutAll.setBackground(Color.darkGray);
 		checkoutAll.setForeground(Color.white);
 		checkoutAll.addActionListener(this);
+		checkoutAll.setOpaque(true);
 		add(checkoutAll);
 
 		saveFile.setBounds((int)(w*0.80), startY, (int)(w*0.1), (int)(h*0.03f));
@@ -124,6 +128,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		saveFile.setBackground(Color.darkGray);
 		saveFile.setForeground(Color.white);
 		saveFile.addActionListener(this);
+		saveFile.setOpaque(true);
 		add(saveFile);
 
 		changeDirectory.setBounds((int)(w*0.90), startY, (int)(w*0.1), (int)(h*0.03f));
@@ -131,9 +136,12 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		changeDirectory.setBackground(Color.darkGray);
 		changeDirectory.setForeground(Color.white);
 		changeDirectory.addActionListener(this);
+		changeDirectory.setOpaque(true);
 		add(changeDirectory);
 		
 		onRefesh();
+		repaint();
+		invalidate();
 	}
 
 	void readProperties() throws Exception
