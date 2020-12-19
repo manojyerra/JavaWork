@@ -25,9 +25,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.MouseWheelEvent;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import scroll.ScrollBar;
 import scroll.ScrollListener;
 import scroll.ScrollEvent;
@@ -35,7 +32,7 @@ import scroll.ScrollEvent;
 import javax.swing.JLabel;
 
 
-class ListGrid extends Panel implements ScrollListener, MouseWheelListener, MouseListener, KeyListener
+class ListGrid extends Panel implements ScrollListener, MouseWheelListener, MouseListener
 {
 	private ArrayList<RowUI> _labels = new ArrayList<RowUI>();
 	private ArrayList<String> _rows;
@@ -57,26 +54,30 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 	
 	private Color default_label_bg = new Color(32, 32, 32);
 	private Color default_label_fg = new Color(200, 200, 200);
-		
-	ListGrid(int x, int y, int w, int h, int rowH, ArrayList<String> rows)
+	
+	private RevertChangeListener _revertChangeListener = null;
+	
+	
+	ListGrid(int x, int y, int w, int h, int rowH, ArrayList<String> rows, RevertChangeListener revertChangeListener)
 	{
-		init(x, y, w, h, rowH, (ArrayList<String>)rows.clone());
+		init(x, y, w, h, rowH, (ArrayList<String>)rows.clone(), revertChangeListener);
 	}
 
 
-	ListGrid(int x, int y, int w, int h, int rowH, String filePath)
+	ListGrid(int x, int y, int w, int h, int rowH, String filePath, RevertChangeListener revertChangeListener)
 	{
-		init(x, y, w, h, rowH, Util.getFileData(filePath));
+		init(x, y, w, h, rowH, Util.getFileData(filePath), revertChangeListener);
 	}
 	
 
-	private void init(int x, int y, int w, int h, int rowH, ArrayList<String> rows)
+	private void init(int x, int y, int w, int h, int rowH, ArrayList<String> rows, RevertChangeListener revertChangeListener)
 	{
 		super.setBounds(x, y, w, h);
 		super.setLayout(null);
 		super.setBackground(Color.GRAY);
 		
 		_rows = rows;
+		_revertChangeListener = revertChangeListener;
 
 		_font = new Font("Serif", Font.PLAIN, rowH-5);
 
@@ -112,7 +113,6 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 			
         super.add( _hScrollBar.getPointer() );
         super.add( _hScrollBar.getBg() 		);
-		//super.add(_changesColors);
     }
 
 
@@ -193,6 +193,7 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 		int notches = e.getWheelRotation();
 		moveAndUpdateScroll(notches);
 	}
+	
 	
 	public void moveAndUpdateScroll(int notches)
 	{
@@ -412,15 +413,8 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 				
 				if(_linkedListGrid != null)
 					_linkedListGrid.setTextOnLabels(_topIndex);
-			}
-			else if(e.getButton() == MouseEvent.BUTTON2)
-			{
-				undoChange(rowIndex);
-				
-				setTextOnLabels(_topIndex);
-				
-				if(_linkedListGrid != null)
-					_linkedListGrid.setTextOnLabels(_topIndex);
+					
+				UpdateDiffData();
 			}
 			else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
 			{
@@ -447,6 +441,8 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 					
 					if(_linkedListGrid != null)
 						_linkedListGrid.setTextOnLabels(_topIndex);
+						
+					UpdateDiffData();
 				}
 			}
 			else if(e.getButton() == MouseEvent.BUTTON3)
@@ -460,28 +456,32 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 				int diff = startIndex - middleIndex;
 
 				moveAndUpdateScroll(diff);
+				
+				UpdateDiffData();
 			}
 		}
 	}
-
-	public void keyReleased(java.awt.event.KeyEvent e)
-	{		
-		int keyCode = e.getKeyCode();
 	
-		System.out.println("Key Released "+keyCode);
-
-		if(keyCode == KeyEvent.VK_HOME)
+	
+	void UpdateDiffData()
+	{
+		if(_revertChangeListener != null)
 		{
-			moveAndUpdateScroll(-_topIndex-1);
-		}
-		else if(keyCode == KeyEvent.VK_END)
-		{
-			moveAndUpdateScroll(_rows.size()+1);
+			int numRows = _rows.size();
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			
+			for(int i=0; i<numRows; i++)
+			{
+				if(canUndo(i) == 0)
+					continue;
+				
+				list.add(i);
+			}
+			
+			_revertChangeListener.changeReverted(list, numRows);
 		}
 	}
-	
-	public void keyTyped(java.awt.event.KeyEvent e){}
-	public void keyPressed(java.awt.event.KeyEvent e){}
+
 
 	public void mouseClicked(java.awt.event.MouseEvent e){}
 	public void mousePressed(java.awt.event.MouseEvent e){}

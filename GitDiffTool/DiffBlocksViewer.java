@@ -18,7 +18,7 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 
 
-public class DiffBlocksViewer extends Panel
+public class DiffBlocksViewer extends Panel implements RevertChangeListener
 {
 	ArrayList<DiffBlock> _diffBlocks = null;
 	
@@ -31,6 +31,7 @@ public class DiffBlocksViewer extends Panel
 	private DiffColor _diffColor = new DiffColor();
 	private static final int ROW_HEIGHT = 22;
 	
+	
 	DiffBlocksViewer(ArrayList diffData, int x, int y, int w, int h)
 	{
 		setBounds(x, y, w, h);
@@ -41,11 +42,11 @@ public class DiffBlocksViewer extends Panel
 		
 		retriveTablesData( _diffBlocks );
 		
-		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, ROW_HEIGHT, _leftTableData);
+		_tableLeft 	= new ListGrid(w/2,	0, w/2, h, ROW_HEIGHT, _leftTableData, this);
 		
 		int scrollBarW = _tableLeft.getScrollBarWidth();
 		
-		_tableRight = new ListGrid(0, 0, w/2 - scrollBarW, h, ROW_HEIGHT, _rightTableData);
+		_tableRight = new ListGrid(0, 0, w/2 - scrollBarW, h, ROW_HEIGHT, _rightTableData, null);
 		
 		_tableLeft.setLinkedListGrid( _tableRight );
 		_tableRight.setLinkedListGrid( _tableLeft );
@@ -61,6 +62,8 @@ public class DiffBlocksViewer extends Panel
 		add(_tableLeft);
 		add(_tableRight);
 		add(_diffColor);
+		
+		_tableLeft.UpdateDiffData();
 	}
 
 	
@@ -75,54 +78,28 @@ public class DiffBlocksViewer extends Panel
 		}
 	}
 	
+	
 	void print()
 	{
 		for(int i=0; i<_diffBlocks.size(); i++)
 			_diffBlocks.get(i).print();
 	}
+	
 
 	ArrayList<String> getLeftBlockData()
 	{
 		return _tableLeft.getData();
 	}
+	
 
 	ArrayList<String> getRightBlockData()
 	{
 		return _tableRight.getData();
 	}
-}
-
-
-class DiffColor extends Label
-{
-	private Graphics _g = null;
-	private ArrayList<Integer> _yList = null;
-	private Color darkGreen = new Color(0,128,0);
 	
-	void setLineAt(ArrayList<Integer> yList)
-	{
-		_yList = yList;
-	}
 	
-    public void paint(Graphics g)
+	public void changeReverted(ArrayList<Integer> rowNumbersList, int totRows)
 	{
-		_g = g;
-				
-		g.setColor(darkGreen);
-        DrawLineAt(50);
-    }	
-	
-	void DrawLineAt(int y)
-	{
-		if(_g != null)
-		{
-			_g.fillRect(0, y, getWidth(), 3);
-		}
+		_diffColor.paintDiffColors(rowNumbersList, totRows);
 	}
 }
-
-interface RevertChangeListener
-{
-	void changeReverted();
-}
-
