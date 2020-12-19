@@ -4,13 +4,12 @@ import java.awt.Button;
 import java.awt.Color;
 
 
-class RowUI extends JLabel
+class RowUI extends Label
 {
 	RowUI()
 	{
-		setOpaque(true);
+		//setOpaque(true);
 	}
-
 
 	@Override
 	public void setText(String text)

@@ -138,7 +138,7 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 
 			label.setBounds(0, i*rowH, w, rowH);
 			label.setForeground(default_label_fg);
-			label.setOpaque(true);
+			//label.setOpaque(true);
 			label.setBackground(default_label_bg);			
 			label.setFont(_font);
 			label.addMouseWheelListener(this);
