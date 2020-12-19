@@ -54,7 +54,7 @@ public class DiffBlocksViewer extends Panel implements RevertChangeListener
 		int diffX = _tableLeft.getX() - _tableRight.getScrollBarWidth();
 		int diffY = _tableLeft.getY();
 		int diffW = _tableLeft.getScrollBarWidth();
-		int diffH = _tableLeft.getHeight();
+		int diffH = _tableLeft.getHeight() - _tableLeft.getScrollBarWidth();
 		
 		_diffColor.setBounds(diffX, diffY, diffW, diffH);
 		_diffColor.repaint();

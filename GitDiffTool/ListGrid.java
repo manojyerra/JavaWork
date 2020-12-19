@@ -74,7 +74,7 @@ class ListGrid extends Panel implements ScrollListener, MouseWheelListener, Mous
 	{
 		super.setBounds(x, y, w, h);
 		super.setLayout(null);
-		super.setBackground(Color.GRAY);
+		super.setBackground(default_label_bg);
 		
 		_rows = rows;
 		_revertChangeListener = revertChangeListener;

@@ -14,7 +14,7 @@ public class ScrollBar implements MouseListener, MouseMotionListener, MouseWheel
 	private Label _ptr = new Label();
     
     private Color _bgColor = Color.LIGHT_GRAY;
-    private Color _ptrColor = new Color(150, 150, 150);
+    private Color _ptrColor = new Color(96, 96, 164);
 
 	private ScrollListener _scrollListener = null;
 	

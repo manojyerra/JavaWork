@@ -37,7 +37,9 @@ import json.*;
 class GitDiffTool extends JFrame implements ItemListener, ActionListener
 {
 	DiffBlocksViewer currentBlock = null;
+	
 	Choice ch = new Choice();
+	
 	Button refresh = new Button("Refresh");
 	Button checkout = new Button("Checkout");	
 	Button checkoutAll = new Button("Checkout All");
@@ -67,7 +69,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 
 		setVisible(true);
 		setLayout(null);
-		getContentPane().setBackground( new Color(225,225,255) );
+		getContentPane().setBackground( new Color(32,32,32) );
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		readProperties();
@@ -95,27 +97,27 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		ch.addItemListener(this);
 		add(ch);
 
-		refresh.setBounds((int)(w*0.50), startY,(int)(w*0.1), (int)(h*0.05f));
+		refresh.setBounds((int)(w*0.50), startY,(int)(w*0.1), (int)(h*0.025f));
 		refresh.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		refresh.addActionListener(this);
 		add(refresh);
 
-		checkout.setBounds((int)(w*0.60), startY, (int)(w*0.1), (int)(h*0.05f));
+		checkout.setBounds((int)(w*0.60), startY, (int)(w*0.1), (int)(h*0.025f));
 		checkout.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		checkout.addActionListener(this);
 		add(checkout);
 
-		checkoutAll.setBounds((int)(w*0.70), startY, (int)(w*0.1), (int)(h*0.05f));
+		checkoutAll.setBounds((int)(w*0.70), startY, (int)(w*0.1), (int)(h*0.025f));
 		checkoutAll.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		checkoutAll.addActionListener(this);
 		add(checkoutAll);
 
-		saveFile.setBounds((int)(w*0.80), startY, (int)(w*0.1), (int)(h*0.05f));
+		saveFile.setBounds((int)(w*0.80), startY, (int)(w*0.1), (int)(h*0.025f));
 		saveFile.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		saveFile.addActionListener(this);
 		add(saveFile);
 
-		changeDirectory.setBounds((int)(w*0.90), startY, (int)(w*0.1), (int)(h*0.05f));
+		changeDirectory.setBounds((int)(w*0.90), startY, (int)(w*0.1), (int)(h*0.025f));
 		changeDirectory.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		changeDirectory.addActionListener(this);
 		add(changeDirectory);
