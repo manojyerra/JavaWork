@@ -39,7 +39,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 {
 	DiffBlocksViewer currentBlock = null;
 	
-	Choice ch = new Choice();
+	JComboBox<String> ch = new JComboBox<String>();
 	
 	JButton refresh = new JButton("Refresh");
 	JButton checkout = new JButton("Checkout");	
@@ -97,6 +97,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 		ch.setFont(new Font("TimesRoman", Font.BOLD, 15));
 		ch.setBackground(Color.darkGray);
 		ch.setForeground(Color.white);
+		ch.addActionListener(this);
 		add(ch);
 
 		refresh.setBounds((int)(w*0.50), startY,(int)(w*0.1), (int)(h*0.03f));
@@ -276,7 +277,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 
 		if(ch.getItemCount() > 0)
 		{
-			SetDiffBlockViewer(ch.getItem(0));
+			SetDiffBlockViewer(ch.getItemAt(0));
 		}	
 		else
 		{
@@ -289,12 +290,12 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 
 	void addModifiedFilesToChoice() throws Exception
 	{
-		ch.removeAll();
+		ch.removeAllItems();
 
 		ArrayList<String> modifiedList = Util.getModifiedFilesList(projPath);
 	
 		for(int i=0; i<modifiedList.size(); i++)
-			ch.add(modifiedList.get(i));		
+			ch.addItem(modifiedList.get(i));		
 	}
 
 	void SetDiffBlockViewer(String filePath) throws Exception
@@ -316,7 +317,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 	public void itemStateChanged(ItemEvent e)
 	{
 		try{
-			SetDiffBlockViewer(ch.getSelectedItem());
+			SetDiffBlockViewer((String)ch.getSelectedItem());
 		}catch(Exception exc){exc.printStackTrace();}
 	}
 
@@ -324,7 +325,11 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 	{
 		try
 		{
-			if(ae.getSource() == refresh)
+            if(ae.getSource() == ch)
+            {
+                SetDiffBlockViewer((String)ch.getSelectedItem());
+            }
+			else if(ae.getSource() == refresh)
 			{
 				onRefesh();
 			}
@@ -336,7 +341,7 @@ class GitDiffTool extends JFrame implements ItemListener, ActionListener
 				{
 					//System.out.println("getSelectedItem..."+ch.getSelectedItem());
 
-					Util.checkout(projPath, ch.getSelectedItem());
+					Util.checkout(projPath, (String)ch.getSelectedItem());
 
 					onRefesh();
 				}
